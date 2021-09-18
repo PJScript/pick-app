@@ -1,0 +1,258 @@
+.hover:hover{
+  color:orange;
+  cursor: pointer;
+}
+
+body,html{
+  width: 100%;
+  padding:0px;
+  margin:0px;
+  overflow-x: hidden;
+}
+
+
+.backPage, .setting:hover{
+  cursor:pointer;
+}
+/* All page */
+.NavMenu-inner{
+  display: flex;
+  list-style-type:none;
+  justify-content: space-evenly;
+  font-weight: bold;
+  color:black;
+  padding-top:10px;
+  padding-bottom: 10px;
+  margin-top:0;
+  margin-bottom:-34px;
+  font-size: 0.8rem;
+}
+footer{
+  display: flex;
+  flex-direction: column;
+  background-color:black;
+  color:grey;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size:0.7rem;
+  padding-left:20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.footertitle{
+  margin-right: 10px;
+}
+/* mainPage */
+.MainPage{
+  width: 100%;
+
+}
+
+.MainTitle_container{
+  position: relative;
+  width: 100%;
+  height: auto;
+  background-color: rgb(243, 243, 243);
+  box-shadow: 0px 0px 7px 0px black;
+}
+.MainTitle_title{
+  display: flex;
+  justify-content: space-between;
+}
+.MainTitle_right {
+  display: flex;
+  padding-right: 12px;
+}
+.loginBtn{
+  margin-right: 20px;
+}
+.LoginSubmitBtn{
+  display: flex;
+  justify-content: center;
+}
+.LoginSubmitBtn-center{
+  text-align: center;
+  width: 10rem;
+  margin-top: 5px;
+  background-color: green;
+  border-radius: 7px;
+}
+.MainTitle_text{
+  width: 100%;
+  margin-top:20px;
+}
+.MainSubTitle_container{
+  width: 100%;
+  height: 0;
+  padding-bottom : calc(925/1920 * 100%);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image:url('/home/js/Desktop/BootReviewClient/src/images/hands-2178566_1920.jpg');
+  background-position: center;
+  
+}
+.MainSubTitle_title{
+  width: 100%;
+  height: 100%;
+  font-size: 1vw;
+  padding-left:20px;
+  padding-top:20px;
+}
+.MainContent_container{
+  width: 100%;
+  height: 0;
+  background-repeat: no-repeat;
+  padding-bottom : calc(700/1280 * 100%);
+  background-size: cover;
+  background-position: center;
+  background-image: url('/home/js/Desktop/BootReviewClient/src/images/MainSecondContent.png');
+}
+.MainSecondContent_container{
+  width: 100%;
+  height: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-bottom : calc(680/1080 * 100%);
+  background-position: center;
+  background-image: url('/home/js/Desktop/BootReviewClient/src/images/second.png');
+}
+
+
+
+
+
+
+
+
+
+@media screen and (max-width:490px) {
+  html{
+    font-size: 70%;
+  }
+  .MainSubTitle_title{
+    font-size:1vw;
+  }
+  .linkContainer{
+    display: none;
+  }
+  .mainPage{
+    font-size:10px;
+  }
+  
+}
+/* boardPage */
+.boardTop{
+  display: flex;
+  justify-content: space-between;
+}
+.boardPage{
+  display: flex;
+  justify-content: space-evenly;
+}
+.boardItem{
+  text-align: center;
+  width: 100%;
+  padding-right:20px;
+  padding-left:20px;
+  border: 1px solid red;
+  overflow-x:hidden;
+}
+.boardList{
+  word-break: break-all;
+  display: flex;
+  list-style-type:none;
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.boardList > li{
+  width: 200px;
+  height: 300px;
+  margin-bottom: 20px;
+  margin-right: 12px;
+  padding-left:10px;
+  padding-right:10px;
+  flex-basis: 200px;
+  flex-grow: 1;
+  background-color:white;
+  border-radius: 24px;
+  box-shadow: 1px 1px 25px 1px rgb(0 0 0/23%);
+}
+.boardList > li > div > .title{
+  text-align: center;
+}
+.boardItem > .subtitle{
+  text-align: left;
+  margin-left:36px;
+  padding-left:10px;
+  background-color: rgb(128, 128, 128,0.1);
+  border-radius: 10px;
+}
+
+.boardList > li > div > .content{
+  height: 200px;
+  overflow-y: hidden;
+}
+
+/* boardLink component */
+.linkContainer{
+  display: flex;
+  justify-content: space-evenly;
+  border:1px solid blue;
+}
+.linkList{
+  display: flex;
+  width: 50%;
+  height: auto;
+}
+img{
+  width: 100px;
+  height: auto;
+  margin-left:2px;
+}
+
+@media screen and (max-width:1024px){
+  .linkList{
+    width: 90%;
+  }
+}
+/* login component */
+.headerSetting{
+  border:1px solid gray;
+  padding:2px;
+  margin-bottom: 3px;
+}
+.loginCp{
+  border:1px solid red;
+}
+
+
+/* Login Page */
+.LoginPage-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height:95vh;
+}
+.LoginWrapper{
+  display: flex;
+  justify-content: center;
+}
+.Login-Box{
+  border-radius: 25px;
+  box-shadow: 0px 0px 25px 0px gray;
+  padding:50px;
+}
+.signupBox{
+  display: flex;
+  flex-direction: column;
+}
+.signupItem{
+  border:1px solid red;
+  background-color:black;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1px;
+}
