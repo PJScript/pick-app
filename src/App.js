@@ -6,13 +6,17 @@ import boardPage from './page/boardPage'
 import loginPage from './page/loginPage';
 import NavMenu from './compnent/navMenu';
 import Header from './compnent/header'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.js';
+import targetPlatformPage from './page/targetPlatformPage';
+
 
 function App() {
-
   return (
+    
     <div className="App">
       <Header />
-      <NavMenu /> 
+      <NavMenu />
       <Router>
         <div>
           <Switch>

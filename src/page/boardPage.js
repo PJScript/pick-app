@@ -1,59 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Swal from 'sweetalert2'
 import { useHistory } from 'react-router'
+import InputModal from '../compnent/inputModal'
+import codeStates from '/home/js/Desktop/BootReviewClient/src/images/logo/codestates.8a6777aa.png'
+import Header from '../compnent/header'
+import NavMenu from '../compnent/navMenu'
 const TargetPage = () => {
-  let tf = false
   let history = useHistory()
-  
+  let [test, setTest] = useState('')
+
   const backPage = () => {
     history.push('/')
   }
-  
-  const inputForm = async () => {
-    localStorage.inputReview = ''
-    const alert = () => {
-      Swal.fire({
-        input: 'textarea',
-        inputLabel: '후기 입력',
-        inputValue:localStorage.inputReview,
-        inputPlaceholder: 'Type your message here...',
-        allowOutsideClick:false,
-        inputAttributes: {
-          'aria-label': 'Type your message here'
-        },
-        showCancelButton: true
-      }).then((data) => {
-        localStorage.inputReview = data.value
-        if(data.isConfirmed === true){
-          if(data.value.length <= 30){
-            Swal.fire({
-              text:'60글자 이상 써주세요'
-            }).then((data) => {
-              return alert()
-            })
-          }
-        }
-      })
-    }
-    
-    alert()
-    }
-  
+ 
+
+
+
   return (
-    <div className='boardPage'>
+    <>
+    <div className='boardPage container-xxl'>
       <div className='boardItem'>
         <div className='boardTop'>
           <div >
-            <a className='backPage hover' onClick={backPage}>뒤로가기</a>
+            <a href='/' className='backPage hover' onClick={backPage}><i class="bi bi-arrow-left-circle"></i> 뒤로 </a>
           </div>
-          <div><h2>후기</h2></div>
+          <div className='boardTop-center' style={{backgroundImage:`url(${codeStates})`}}><h3>후기</h3></div>
           <div >
-            <a className='setting hover'>setting</a>
+            <a className='setting hover'><i class="bi bi-gear"></i> 설정 </a>
           </div>
         </div>
-        <h3 className='subtitle name'>{localStorage.platformname} </h3>
-        <h3 className='subtitle'>후기를 남겨주세요!</h3>
-        <h4 className='comfirmBtn hover' onClick={inputForm}>작성하기</h4>
+
+        <h5 className='subtitle name'>{localStorage.target} </h5>
+        <h4 className='subtitle'>후기를 남겨주세요!</h4>
+          <InputModal />
         <ul className='boardList'>
           <li>
             <div>
@@ -94,6 +73,7 @@ const TargetPage = () => {
         <a className='more hover'>더보기</a>
       </div>
     </div>
+  </>
   )
 }
 

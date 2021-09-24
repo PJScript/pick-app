@@ -1,9 +1,8 @@
 import React from 'react'
-import BoardLink from '../compnent/boardLink'
+import Header from '../compnent/header'
 import NavMenu from '../compnent/navMenu'
 
 const MainPage = () => {
-
   return (
     <div className='MainPage'>
       <div></div>
@@ -11,9 +10,9 @@ const MainPage = () => {
         <div className='Main mainfirst'>
           <div className='MainSubTitle_container'>
             <div className='MainSubTitle_title'>
-              <h2 style={{borderBottom:'2px solid skyblue'}}>All of coding infomation</h2>
-              <h3>코딩<h2>부트캠프의</h2>모든 것 </h3>
-              <h1>BootView 에서</h1>
+              <h4 style={{borderBottom:'2px solid skyblue'}}>All of coding infomation</h4>
+              <h5>코딩<h3>부트캠프의</h3>모든 것 </h5>
+              <h1>BootView</h1>
             </div>
           </div>
         </div>

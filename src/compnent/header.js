@@ -1,22 +1,50 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const Header = () => {
+  let LoginState = useSelector(state => state.LoginState)
+  console.log(LoginState)
+  const loginState = () => {
+    localStorage.log = '로그아웃'
+    if(localStorage.log = '로그아웃'){
+      localStorage.log = '로그인'
+    }
+  }
+
+  const logoutBtn = () => {
+    alert('로그아웃 되었습니다')
+  }
+  
   return (
-    <header className='MainTitle_container'>
-    <div className='MainTitle_title'>
-      <div className='MainTitle_left'>
-        <h4 className='hover'><a href='/'>뒤로가기</a></h4>
-      </div>
-      <div className='MainTitle_center'>
-        <h3 className='MainTitle_text'><a href='/'>BootView</a></h3>
-      </div>
-      <div className='MainTitle_right'>
-        <h4 className="loginBtn hover"> <a href='/login'>login</a></h4>
-        <h4 className="hamberger hover">메뉴</h4>
+    <nav class="navbar navbar-light bg-light">
+    <div class="container-fluid" style={{display:'flex'}}>
+      <div>왼쪽</div>
+      <a class="navbar-brand" href="/">
+        <img src={require('/home/js/Desktop/BootReviewClient/src/images/icons8-magnifying-glass-64.png').default} alt="" width="30" height="24" class="d-inline-block align-text-top"></img>
+        BootView
+      </a>
+      <div className='topSettingBox'>
+        <div className='loginBtn A hover' onClick={loginState}>
+          <a href='/login'><i class="bi bi-door-open"></i>로그인</a>
+        </div>
+        <div className='loginBtn A hover' onClick={loginState} onClick={logoutBtn}>
+          <div><i class="bi bi-door-open-fill" ></i>로그아웃</div>
+        </div>
+        <div className='darkMode'>
+          <i class="bi bi-palette-fill"> 다크모드 </i>
+        </div>
       </div>
     </div>
-  </header>
+  </nav>
   )
 }
 
 export default Header
+
+
+
+
+
+// <div className='loginBtn'>
+// <a href='#'><i class="bi bi-door-open-fill"></i>로그아웃</a>
+// </div>

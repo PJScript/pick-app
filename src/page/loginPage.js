@@ -1,5 +1,7 @@
 import React from 'react'
 import Login from '../compnent/login'
+import Header from '../compnent/header'
+import NavMenu from '../compnent/navMenu'
 const LoginPage = () => {
 
   return (
