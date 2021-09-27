@@ -1,5 +1,7 @@
 export let initState = {
   AccessToken:'',
   Target:'',
-  LoginState:'로그인'
+  LoginState:false,
+  Number:1,
+  Name:''
 }

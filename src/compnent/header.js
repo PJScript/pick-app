@@ -1,19 +1,28 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch} from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { getAccessToken, loginState } from '../redux/actions'
 
 const Header = () => {
   let LoginState = useSelector(state => state.LoginState)
+  let Email = useSelector(state => state.Email)
+  let dispatch = useDispatch()
+  let history = useHistory()
   console.log(LoginState)
-  const loginState = () => {
-    localStorage.log = '로그아웃'
-    if(localStorage.log = '로그아웃'){
-      localStorage.log = '로그인'
-    }
-  }
+  
 
   const logoutBtn = () => {
-    alert('로그아웃 되었습니다')
+    if(LoginState === false){
+      history.push('/login')
+    }else{
+      dispatch(loginState(false))
+      dispatch(getAccessToken(''))
+      alert('로그아웃 되었습니다')
+    }
   }
+  useEffect(()=>{
+
+  },[LoginState])
   
   return (
     <nav class="navbar navbar-light bg-light">
@@ -24,11 +33,9 @@ const Header = () => {
         BootView
       </a>
       <div className='topSettingBox'>
-        <div className='loginBtn A hover' onClick={loginState}>
-          <a href='/login'><i class="bi bi-door-open"></i>로그인</a>
-        </div>
-        <div className='loginBtn A hover' onClick={loginState} onClick={logoutBtn}>
-          <div><i class="bi bi-door-open-fill" ></i>로그아웃</div>
+        <div className='welcomeMsg'>{LoginState? `${Email} 님 환영합니다`: ``}</div>
+        <div className='loginBtn A hover' onClick={logoutBtn}>
+          <div><i class="bi bi-door-open"></i>{LoginState? '로그아웃':'로그인'}</div>
         </div>
         <div className='darkMode'>
           <i class="bi bi-palette-fill"> 다크모드 </i>

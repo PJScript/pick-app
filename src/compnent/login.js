@@ -4,18 +4,18 @@ import { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button';
 import SignUpModal from '../compnent/signUpModal'
 import { useSelector, useDispatch } from 'react-redux';
-import {getAccessToken, loginState} from '../redux/actions'
+import {getAccessToken, getName, loginState} from '../redux/actions'
 import { useHistory } from 'react-router';
 import Swal from 'sweetalert2';
-import NavMenu from './navMenu';
+
+
 
 const Login = () => {
   let history = useHistory()
   const test2 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일이 적합한지 검사할 유효성검사식
   let dispatch = useDispatch()
-  let token  = useSelector(state => state.AccessToken)
-  let login = useSelector(state => state.LoginState)
-
+  // const mydata = useSelector((state) => state);
+  let AccessToken = useSelector((state) => state.AccessToken)
   let [id,setId] = useState('')
   let [pw,setPw] = useState('')
   let [email, setEmailValid] = useState('')
@@ -33,16 +33,22 @@ const Login = () => {
   const signUp = (e) => {
     
   }
-
+  
   const loginSubmit = async () => {
     await axios.post('http://localhost:4000/auth/login',{account:id,pw:pw},{withcredential:true},).then((data)=>{
       console.log(data)
       dispatch(getAccessToken(data.headers.authorization))
-      localStorage.log = '로그아웃'
-      history.push('/')
-      console.log(data)
-    }).catch((err)=>{
-      Swal.fire({
+      dispatch(loginState(true))
+      dispatch(getName(id))
+      // dispatch(getName(data))
+      if(history.location.pathname == '/login'){  // 로그인 페이지 연속으로 클릭시 이전 경로가 /login 으로나와서 로그인 페이지만 뜨는 오류 방지  
+        history.push('/')
+      }else{   // 이전페이지가 /login이 아니라면 이전페이지로 이동
+        history.goBack()
+      }
+    }).catch(async (err)=>{
+      console.log(err)
+      await Swal.fire({
         icon: 'warning',
         title: '아이디 혹은 비밀번호 오류',
         text: '아이디 혹은 비밀번호가 올바르지 않습니다. 다시한번 확인해주세요'
@@ -67,7 +73,6 @@ const Login = () => {
       <div className='Login-Box'>
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Email address</label>
-          <div>{token}</div>
           <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="email" onChange={idSave}></input>
         </div>
         <div class="mb-3">

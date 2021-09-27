@@ -1,9 +1,14 @@
+import axios from 'axios';
 import React from 'react'
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const SignUpModal = () => {
+  let history = useHistory()
+
   const test1 = /^[a-zA-Z0-9]{4,12}$/ // 아이디와 비번을 검사할 유효성검사식
-  const test2 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일이 적합한지 검사할 유효성검사식
+  const test2 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;  // 이메일이 적합한지 검사할 유효성검사식
   const nameExp = /^[가-힣]{2,4}|[a-zA-Z]{2,10}\s[a-zA-Z]{2,10}$/; // 이름 유효성 검사
   const pwtest = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/
   
@@ -29,6 +34,33 @@ const SignUpModal = () => {
   
   let [eyeIcon, setEyeIcon] = useState('bi bi-eye-slash-fill hover')
   let [passWordType, setType] = useState('password')
+  
+  let [radioValue, setRadioValue] = useState('')
+  let [emailList, setEmailList] = useState('선택하세요')
+  
+  let [emailAbleInput, setEmailAbleInput] = useState('none')
+  let [emailDisableInput, setEmailDisAbleInput] = useState('grid')
+  
+  let [fullEmail, setFullEmail] = useState('')
+
+  useEffect(()=>{
+    setFullEmail('')
+    setFullEmail(`${email}@${emailList}`)
+  },[email,emailList])    // email (이메일 @ 앞자리), emailList (이메일 @ 뒷자리)
+
+  useEffect(()=>{      
+    if(test2.test(fullEmail)){
+      console.log('완료')
+      setEmailColor('rgb(174, 255, 174)')
+      setEmailFeedBack('완료')
+      setEmailIconColor('green')
+    }else{
+      console.log(fullEmail)
+      setEmailColor('rgb(255, 152, 152)')
+      setEmailFeedBack('이메일 형식이 올바르지 않습니다')
+      setEmailIconColor('red')
+    }
+  },[fullEmail])    // 이메일 형태로 만든 최종 이메일 값
 
   const nameCheck = (e) => {
     console.log(e.target.value)
@@ -47,21 +79,14 @@ const SignUpModal = () => {
   }
   const radioCheck = (e) => {
     console.log(e.target.value)
+    setRadioValue(e.target.value)
   }
-  const emailCheck = (e) => {
-    if(test2.test(e.target.value)){
-      console.log('완료')
-      setEmailColor('rgb(174, 255, 174)')
-      setEmailFeedBack('완료')
-      setEmailIconColor('green')
+  const emailInput = (e) => {
       setEmail(e.target.value)
-    }else{
-      setEmailColor('rgb(255, 152, 152)')
-      setEmailFeedBack('이메일 형식이 올바르지 않습니다')
-      setEmailIconColor('red')
-      setEmail(e.target.value)
-    }
+  }
+  const emailAdressInput = (e) => {
     console.log(e.target.value)
+      setEmailList(e.target.value)
   }
   const pwCheck = (e) => {
     setPwC('')
@@ -105,6 +130,51 @@ const SignUpModal = () => {
     }
   }
 
+
+
+  const submitBtn = async () => {
+    console.log(fullEmail)
+    if(name.length <= 0 || email.length <= 0 || pw.length <= 0 || pwC.length <= 0 || radioValue.length <= 0){
+      alert('항목을 모두 채워주세요')
+    }else if(nameFeedBack != '완료' || emailFeedBack != '완료' || pwFeedBack  != '완료' || pwCheckFeedBack != '완료'){
+      alert('각 항목을 다시 확인해주세요')
+    }else{
+      await axios.post('http://localhost:4000/auth/signup',
+      {
+        account:fullEmail,
+        pw:pw,
+        name:name,
+        gender:radioValue,
+        sns:'none'
+      },{withCredentials:true}).then((data) => {
+        console.log(data)
+        alert('회원가입 완료! 로그인 해주세요')
+        history.push('/login')
+      }).catch((err)=>{
+        if(err.response.status === 409){
+          Swal.fire({
+            icon: 'error',
+            title: '가입된 이메일',
+            text: '이미 가입된 이메일 입니다. 기억나지 않는다면 계정 찾기를 진행해주세요',
+            footer: '<a href="">Why do I have this issue?</a>'
+          })
+        }
+      })
+    }
+  }
+
+  const selectInput = (e) => {
+    console.log(e.target.innerText)
+    setEmailList(e.target.innerText)
+    setEmailAbleInput('none')
+    setEmailDisAbleInput('grid')
+  }
+
+  const userInput = (e) => {
+    console.log(e.target.innerText)
+    setEmailAbleInput('grid')
+    setEmailDisAbleInput('none')
+  }
   return (
     <div>
     <a href='#' className="hover" data-bs-toggle="modal" data-bs-target="#exampleModal">회원가입</a>
@@ -136,9 +206,22 @@ const SignUpModal = () => {
                 </div>
                 <div class="mb-3">
                   <label for="recipient-name" class="col-form-label" >이메일</label>
-                  <input type="text" class="form-control" id="recipient-name" placeholder='email' onChange={emailCheck} style={{backgroundColor:emailColor}}></input>
-                  <i class="bi bi-check-circle-fill" style={{color:emailIconColor}}></i>
-                  <span>{emailFeedBack}</span>
+                  <div class="input-group mb-3">
+                  <input type="text" class="form-control" id="recipient-name" placeholder='email' onChange={emailInput} style={{ backgroundColor: emailColor }}></input>
+                    <div> @ </div> 
+                    <input type="text" class="form-control" id="recipient-name" placeholder='직접 입력하세요' onChange={emailAdressInput} style={{ display:emailAbleInput}}></input>
+                    <input disabled type="text" class="form-control" id="recipient-name" placeholder={emailList} style={{display:emailDisableInput}}></input>
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{emailList}</button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item hover" onClick={selectInput}>naver.com</a></li>
+                      <li><a class="dropdown-item hover" onClick={selectInput}>google.com</a></li>
+                      <li><a class="dropdown-item hover" onClick={selectInput}>hanmail.com</a></li>
+                      <li><hr class="dropdown-divider"></hr></li>
+                      <li><a class="dropdown-item hover" onClick={userInput}>직접 입력</a></li>
+                    </ul>
+                  </div>
+                  <i class="bi bi-check-circle-fill" style={{ color: emailIconColor }}></i>
+                <span>{emailFeedBack}</span>
                 </div>
                 <div class="mb-3">
                   <label for="message-text" class="col-form-label">비밀번호</label>
@@ -158,7 +241,7 @@ const SignUpModal = () => {
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">회원가입 취소</button>
-            <button type="button" class="btn btn-primary">가입완료</button>
+            <button type="button" class="btn btn-primary" onClick={submitBtn}>가입완료</button>
           </div>
         </div>
       </div>
@@ -166,7 +249,7 @@ const SignUpModal = () => {
   </div>
 
   )
- 
+
 }
 
 export default SignUpModal

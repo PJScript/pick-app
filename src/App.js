@@ -9,15 +9,20 @@ import Header from './compnent/header'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import targetPlatformPage from './page/targetPlatformPage';
+import { useSelector } from 'react-redux'
+
+
 
 
 function App() {
+
+  let state = useSelector((state)=>state.AccessToken)
+  console.log(state)
   return (
-    
     <div className="App">
+      <Router>
       <Header />
       <NavMenu />
-      <Router>
         <div>
           <Switch>
               <Route exact path='/' component={mainPage} />

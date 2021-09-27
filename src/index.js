@@ -3,16 +3,23 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createStore, applyMiddleware } from 'redux';
-import rootReducer from './redux/reducer'
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import authReducer from './redux/reducer'
 import { Provider } from 'react-redux';
 import logger from 'redux-logger';
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
-let store = createStore(rootReducer, applyMiddleware(logger));
 
+let store = createStore(authReducer, applyMiddleware(logger));
+const persistor = persistStore(store);
+
+console.log(store.getState())
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
 );

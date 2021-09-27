@@ -3,6 +3,7 @@ import Header from '../compnent/header'
 import NavMenu from '../compnent/navMenu'
 
 const MainPage = () => {
+
   return (
     <div className='MainPage'>
       <div></div>
