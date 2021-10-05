@@ -25,7 +25,7 @@ const TargetPage = ({match}) => {
 
   // useEffect(()=>{
   // if(reviewArr.length <= 0){
-  //   axios.get('http://localhost:4000/comment/platform?code=pt1&page=1')
+  //   axios.get('https://server.bootview.info/comment/platform?code=pt1&page=1')
   //   .then((res)=>{
   //     if(res.data.length <= 0){
   //       console.log('첫번째로 후기를 남겨주세요!')

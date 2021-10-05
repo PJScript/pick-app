@@ -23,7 +23,7 @@ const Header = () => {
       dispatch(loginState(false))
       dispatch(getAccessToken(''))
 
-      await axios.get('http://localhost:4000/auth/logout',{withCredentials:true})
+      await axios.get('https://server.bootview.info/auth/logout',{withCredentials:true})
       .then((data)=>{
         console.log(data)
         alert('로그아웃 되었습니다')
@@ -33,7 +33,7 @@ const Header = () => {
   }
 
   const getFirstReviews = async () => {
-    await axios.get('http://localhost:4000/auth/profile?p=1', {
+    await axios.get('https://server.bootview.info/auth/profile?p=1', {
       headers:{
         "Authorization": AccessToken
       },withCredentials:true
@@ -44,10 +44,10 @@ const Header = () => {
       console.log("상태변경")
     }).catch( async (err)=>{
       if(err.response.status === 401){
-        await axios.get('http://localhost:4000/auth/token',{withCredentials:true})
+        await axios.get('https://server.bootview.info/auth/token',{withCredentials:true})
         .then( async (data)=>{
           dispatch(getAccessToken(data.headers.authorization))
-          await axios.get('http://localhost:4000/auth/profile?p=1',{
+          await axios.get('https://server.bootview.info/auth/profile?p=1',{
             headers:{
               "Authorization": data.headers.authorization
             },withCredentials:true
