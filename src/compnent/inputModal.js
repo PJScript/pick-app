@@ -33,13 +33,13 @@ const InputModal = (e) => {
     if(robotCheck){
 
     console.log(code)
-    await axios.post(`https://server.bootview.info/review/platform?code=${code}`, { title: title, content: content }, {
+    await axios.post(`http://localhost:4000/review/platform?code=${code}`, { title: title, content: content }, {
       headers: {
         "Authorization": AccessToken
       }, withCredentials: true
     }).then(async (data) => {
       console.log(data)
-      await axios.get(`https://server.bootview.info/review/platform?code=${code}&page=1`, { withCredentials: true })
+      await axios.get(`http://localhost:4000/review/platform?code=${code}&page=1`, { withCredentials: true })
         .then((res) => {
           console.log(res.data, "데이터가져옴 다시")
           dispatch(resetReview())
@@ -51,18 +51,18 @@ const InputModal = (e) => {
         })
     }).catch(async (err) => {
       console.log(err)
-      await axios.get('https://server.bootview.info/auth/token', { withCredentials: true })
+      await axios.get('http://localhost:4000/auth/token', { withCredentials: true })
         .then((data) => {
           console.log(data.headers.authorization)
           dispatch(getAccessToken(data.headers.authorization))
           
-          axios.post(`https://server.bootview.info/review/platform?code=${code}`, { title: title, content: content }, {
+          axios.post(`http://localhost:4000/review/platform?code=${code}`, { title: title, content: content }, {
             headers: {
               "Authorization": data.headers.authorization
             }, withCredentials: true
           }).then((data) => {
             console.log(data)
-            axios.get(`https://server.bootview.info/review/platform?code=${code}&page=1`, { withCredentials: true })
+            axios.get(`http://localhost:4000/review/platform?code=${code}&page=1`, { withCredentials: true })
               .then((res) => {
                 console.log(res.data, "데이터가져옴 다시")
                 dispatch(resetReview())

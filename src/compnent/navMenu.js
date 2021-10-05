@@ -21,7 +21,7 @@ const NavMenu = () => {
     localStorage.target = e.target.innerText
     console.log(reviewArr, "클릭 후 리뷰")
     
-      await axios.get(`https://server.bootview.info/review/platform?code=${code}&page=1`,{withCredentials:true})
+      await axios.get(`http://localhost:4000/review/platform?code=${code}&page=1`,{withCredentials:true})
         .then((res) => {
           console.log(res.data)
           dispatch(resetReview())

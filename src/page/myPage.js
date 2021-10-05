@@ -32,7 +32,7 @@ const MyPage = () => {
     setNickName(e.target.value)
   }
   const nickNameCheck = async () => {
-    await axios.post('https://server.bootview.info/auth/valid', { "name" : nickName }, {
+    await axios.post('http://localhost:4000/auth/valid', { "name" : nickName }, {
       headers : {
         "Authorization": AccessToken
       },withCredentials: true
@@ -49,10 +49,10 @@ const MyPage = () => {
         setValidColor('red')
         setValidMsg('이미 존재하는 닉네임 입니다')
       } else if (err.response.status === 401) {
-        await axios.get('https://server.bootview.info/auth/token', { withCredentials: true })
+        await axios.get('http://localhost:4000/auth/token', { withCredentials: true })
           .then( async (data) => {
             dispatch(getAccessToken(data.headers.authorization))
-            await axios.post('https://server.bootview.info/auth/valid', { "name": nickName }, {
+            await axios.post('http://localhost:4000/auth/valid', { "name": nickName }, {
               headers: {
                 "Authorization": data.headers.authorization
               }, withCredentials: true 
@@ -71,16 +71,17 @@ const MyPage = () => {
     console.log(account, title, createDate, platformCode,"결과")
 
     if(window.confirm('정말 삭제하시겠습니까?')){
-      await axios.post(`https://server.bootview.info/review/delete/platform?c=${platformCode}`,{"id":MyReviews[number-1].id,"number":number,"account":account,"title":title,"createDate":createDate},
+      await axios.post(`http://localhost:4000/review/delete/platform?c=${platformCode}`,{"id":MyReviews[number-1].id,"number":number,"account":account,"title":title,"createDate":createDate},
     {headers:{
       "Authorization":AccessToken
     }})
     .then( async (data)=>{
-      await axios.get('https://server.bootview.info/auth/profile?p=1',{
+      await axios.get('http://localhost:4000/auth/profile?p=1',{
         headers:{
           "Authorization":AccessToken
         },withCredentials:true
       }).then((data)=>{
+        dispatch(getMypageReview(''))
         dispatch(getMypageReview(data.data))
         alert('게시글이 삭제되었습니다.')
       }).catch((err)=>{
@@ -90,9 +91,9 @@ const MyPage = () => {
     })
     .catch( async (err)=>{
       if(err.response.status === 401){
-        await axios.get(`http:localhost:4000/auth/token`,{withCredentials:true})
+        await axios.get(`http://localhost:4000/auth/token`,{withCredentials:true})
         .then( async (data)=>{
-          await axios.get(`https://server.bootview.info/auth/profile`,{
+          await axios.get(`http://localhost:4000/auth/profile`,{
             headers:{
               "Authorization":data.headers.authorization
             },withCredentials:true
