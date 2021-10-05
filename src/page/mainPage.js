@@ -12,7 +12,7 @@ const MainPage = () => {
           <div className='MainSubTitle_container'>
             <div className='MainSubTitle_title'>
               <h4 style={{borderBottom:'2px solid skyblue'}}>All of coding infomation</h4>
-              <h5>코딩<h3>부트캠프의</h3>모든 것 </h5>
+              <h5>코딩</h5><h3>부트캠프의</h3><h5>모든 것 </h5>
               <h1>BootView</h1>
             </div>
           </div>

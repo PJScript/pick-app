@@ -17,6 +17,14 @@ body,html{
   cursor:pointer;
 }
 /* All page */
+.pagenation-navBox{
+  display: flex;
+  justify-content: center;
+}
+.navbar-flexBox{
+  display: flex;
+  justify-content:space-between
+}
 .welcomeMsg{
   font-size:20%;
   margin-top:2%;
@@ -147,6 +155,29 @@ footer{
   
 }
 /* boardPage */
+
+.numberBox {
+  margin-top:20px
+}
+.modal-body-top{
+  display: flex;
+  flex-direction: column;
+}
+.anonymousInput-id{
+  width: 30%;
+}
+.anonymousInput-pw{
+  width: 30%;
+}
+.empty-reviewBox{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 19vw;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .boardTop{
   display: flex;
   justify-content: space-between;
@@ -305,4 +336,16 @@ footer{
   align-items: center;
   font-weight: bold;
   font-size: 3vw;
+}
+
+/* mypage */
+
+.mypage-nickNameBox{
+  margin-bottom: 20px;
+}
+.mypage-pwBox{
+  margin-bottom: 20px;
+}
+.button{
+  margin-left:0.5%;
 }

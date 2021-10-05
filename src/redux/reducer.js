@@ -1,8 +1,9 @@
-import { GET_ACCESSTOKEN, CHECK_LOGIN,MINER_NUMBER,ADD_NUMBER, GET_NAME, GET_EMAIL } from "./actions";
-import { initState } from "./initStates";
+import { GET_ACCESSTOKEN, CHECK_LOGIN,MINER_NUMBER,ADD_NUMBER, GET_NAME, GET_EMAIL, GET_REVIEW, RESET_REVIEW, GET_TARGET, IS_LOADING, GET_MYPAGE_REVIEW } from "./actions";
+import { initState, reviewState } from "./initStates";
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import storageSession from 'redux-persist/lib/storage/session'
 
 
 
@@ -33,18 +34,59 @@ const authReducer = (state = initState, action) => {
       ...state,
       Email:action.payload.Email
     }
+    case GET_MYPAGE_REVIEW:
+      return{
+        ...state,
+        MyReviews:[...action.payload]
+      }
     default:
-      return {...state}
+      return state
   }
 }
+
+const reviewReducer = (state = [], action) => {
+  switch(action.type){
+    case GET_REVIEW:
+      return [...state, ...action.payload]
+
+    case RESET_REVIEW:
+      return []
+    
+    case GET_TARGET:
+      return {
+        ...state,
+        Target:action.payload
+      }
+    
+    default:
+    return state
+  }
+}
+
+const loadingReducer = (state = true, action) => {
+  switch(action.type){
+    case IS_LOADING:
+      return action.payload
+
+    default:
+      return state
+  }
+}
+
+
+
+const rootReducer = combineReducers({
+  authReducer,
+  reviewReducer,
+  loadingReducer
+})
 
 const persistConfig = {
   key: "root",
   // localStorage에 저장합니다.
-  storage,
+  storage: storageSession,
+  blacklist:[reviewReducer]
   // blacklist -> 그것만 제외합니다
 };
 
-
-
-export default persistReducer(persistConfig, authReducer);
+export default persistReducer(persistConfig, rootReducer);

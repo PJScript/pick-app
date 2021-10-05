@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
+
 const SignUpModal = () => {
   let history = useHistory()
 
@@ -132,14 +133,15 @@ const SignUpModal = () => {
 
 
 
-  const submitBtn = async () => {
+  const submitBtn = async (e) => {
+    console.log(e)
     console.log(fullEmail)
     if(name.length <= 0 || email.length <= 0 || pw.length <= 0 || pwC.length <= 0 || radioValue.length <= 0){
       alert('항목을 모두 채워주세요')
     }else if(nameFeedBack != '완료' || emailFeedBack != '완료' || pwFeedBack  != '완료' || pwCheckFeedBack != '완료'){
       alert('각 항목을 다시 확인해주세요')
     }else{
-      await axios.post('http://localhost:4000/auth/signup',
+      await axios.post('https://server.bootview.info/auth/signup',
       {
         account:fullEmail,
         pw:pw,
@@ -148,19 +150,25 @@ const SignUpModal = () => {
         sns:'none'
       },{withCredentials:true}).then((data) => {
         console.log(data)
-        alert('회원가입 완료! 로그인 해주세요')
-        history.push('/login')
+        history.go('/login')
+        alert('회원 가입이 완료되었습니다. 로그인 해주세요')
       }).catch((err)=>{
-        if(err.response.status === 409){
+        if(err){
+          console.log(err)
+        }else if(err.response.status === 409){
           Swal.fire({
             icon: 'error',
             title: '가입된 이메일',
             text: '이미 가입된 이메일 입니다. 기억나지 않는다면 계정 찾기를 진행해주세요',
             footer: '<a href="">Why do I have this issue?</a>'
           })
-        }
+      }
       })
     }
+  }
+
+  const cancelBtn = (e) => {
+    console.log(e)
   }
 
   const selectInput = (e) => {
@@ -178,78 +186,76 @@ const SignUpModal = () => {
   return (
     <div>
     <a href='#' className="hover" data-bs-toggle="modal" data-bs-target="#exampleModal">회원가입</a>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">빠른 회원가입</h5>
+    <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title" id="exampleModalLabel">빠른 회원가입</h5>
           </div>
-          <div class="modal-body">
+          <div className="modal-body">
               <form>
-                <div class="mb-3">
-                  <label for="recipient-name" class="col-form-label">이름</label>
-                  <input type="text" class="form-control" id="recipient-name" placeholder='name' onChange={nameCheck} style={{backgroundColor:nameColor}}></input>
-                  <i class="bi bi-check-circle-fill" style={{color:nameIconColor}}></i>
+                <div className="mb-3">
+                  <label for="recipient-name" className="col-form-label">이름</label>
+                  <input type="text" className="form-control" id="recipient-name" placeholder='name' onChange={nameCheck} style={{backgroundColor:nameColor}}></input>
+                  <i className="bi bi-check-circle-fill" style={{color:nameIconColor}}></i>
                   <span>{nameFeedBack}</span>
                 </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="man" onChange={radioCheck}></input>
-                  <label class="form-check-label" for="inlineRadio1" >남성</label>
+                <div className="form-check form-check-inline">
+                  <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="man" onChange={radioCheck}></input>
+                  <label className="form-check-label" for="inlineRadio1" >남성</label>
                 </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="girl" onChange={radioCheck}></input>
-                  <label class="form-check-label" for="inlineRadio2" >여성</label>
+                <div className="form-check form-check-inline">
+                  <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="girl" onChange={radioCheck}></input>
+                  <label className="form-check-label" for="inlineRadio2" >여성</label>
                 </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="other" onChange={radioCheck}></input>
-                  <label class="form-check-label" for="inlineRadio2" >기타</label>
+                <div className="form-check form-check-inline">
+                  <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="other" onChange={radioCheck}></input>
+                  <label className="form-check-label" for="inlineRadio2" >기타</label>
                 </div>
-                <div class="mb-3">
-                  <label for="recipient-name" class="col-form-label" >이메일</label>
-                  <div class="input-group mb-3">
-                  <input type="text" class="form-control" id="recipient-name" placeholder='email' onChange={emailInput} style={{ backgroundColor: emailColor }}></input>
+                <div className="mb-3">
+                  <label for="recipient-name" className="col-form-label" >이메일</label>
+                  <div className="input-group mb-3">
+                  <input type="text" className="form-control" id="recipient-name" placeholder='email' onChange={emailInput} style={{ backgroundColor: emailColor }}></input>
                     <div> @ </div> 
-                    <input type="text" class="form-control" id="recipient-name" placeholder='직접 입력하세요' onChange={emailAdressInput} style={{ display:emailAbleInput}}></input>
-                    <input disabled type="text" class="form-control" id="recipient-name" placeholder={emailList} style={{display:emailDisableInput}}></input>
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{emailList}</button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item hover" onClick={selectInput}>naver.com</a></li>
-                      <li><a class="dropdown-item hover" onClick={selectInput}>google.com</a></li>
-                      <li><a class="dropdown-item hover" onClick={selectInput}>hanmail.com</a></li>
-                      <li><hr class="dropdown-divider"></hr></li>
-                      <li><a class="dropdown-item hover" onClick={userInput}>직접 입력</a></li>
+                    <input type="text" className="form-control" id="recipient-name" placeholder='직접 입력하세요' onChange={emailAdressInput} style={{ display:emailAbleInput}}></input>
+                    <input disabled type="text" className="form-control" id="recipient-name" placeholder={emailList} style={{display:emailDisableInput}}></input>
+                    <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{emailList}</button>
+                    <ul className="dropdown-menu">
+                      <li><a className="dropdown-item hover" onClick={selectInput}>naver.com</a></li>
+                      <li><a className="dropdown-item hover" onClick={selectInput}>google.com</a></li>
+                      <li><a className="dropdown-item hover" onClick={selectInput}>hanmail.com</a></li>
+                      <li><hr className="dropdown-divider"></hr></li>
+                      <li><a className="dropdown-item hover" onClick={userInput}>직접 입력</a></li>
                     </ul>
                   </div>
-                  <i class="bi bi-check-circle-fill" style={{ color: emailIconColor }}></i>
+                  <i className="bi bi-check-circle-fill" style={{ color: emailIconColor }}></i>
                 <span>{emailFeedBack}</span>
                 </div>
-                <div class="mb-3">
-                  <label for="message-text" class="col-form-label">비밀번호</label>
-                  <i class={eyeIcon} onClick={pwhideIcon}></i>
+                <div className="mb-3">
+                  <label for="message-text" className="col-form-label">비밀번호</label>
+                  <i className={eyeIcon} onClick={pwhideIcon}></i>
                   <span> 표시/숨김 </span>
-                <input type={passWordType} class="form-control" id="message-text" placeholder='password' onChange={pwCheck} style={{backgroundColor:pwColor}}></input>
-                <i class="bi bi-check-circle-fill" style={{color:pwIconColor}}></i>
+                <input type={passWordType} className="form-control" id="message-text" placeholder='password' onChange={pwCheck} style={{backgroundColor:pwColor}}></input>
+                <i className="bi bi-check-circle-fill" style={{color:pwIconColor}}></i>
                   <span>{pwFeedBack}</span>
               </div>
-              <div class="mb-3">
-                <label for="message-text" class="col-form-label" >비밀번호 재확인</label>
-                <input type={passWordType} class="form-control" id="message-text" placeholder='password valid' value={pwC} onChange={pwValid} style={{backgroundColor:pwCheckColor}}></input>
-                <i class="bi bi-check-circle-fill" style={{color:pwCheckIconColor}}></i>
+              <div className="mb-3">
+                <label for="message-text" className="col-form-label" >비밀번호 재확인</label>
+                <input type={passWordType} className="form-control" id="message-text" placeholder='password valid' value={pwC} onChange={pwValid} style={{backgroundColor:pwCheckColor}}></input>
+                <i className="bi bi-check-circle-fill" style={{color:pwCheckIconColor}}></i>
                   <span>{pwCheckFeedBack}</span>
               </div>
             </form>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">회원가입 취소</button>
-            <button type="button" class="btn btn-primary" onClick={submitBtn}>가입완료</button>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={cancelBtn}>회원가입 취소</button>
+            <button type="button" className="btn btn-primary" onClick={submitBtn}>가입완료</button>
           </div>
         </div>
       </div>
     </div>
   </div>
-
   )
-
 }
 
 export default SignUpModal

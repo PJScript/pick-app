@@ -8,7 +8,7 @@ const TargetPlatformPage = () => {
     <div>
       <Header />
       <NavMenu /> 
-      <div class="container-xxl">
+      <div className="container-xxl">
         <div className="container-xxl-top line">
           <div className="container-xxl-top-left"></div>
           <div className="container-xxl-top-center"><h3>{localStorage.target}</h3></div>
