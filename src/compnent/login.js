@@ -15,7 +15,7 @@ const Login = () => {
   const test2 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일이 적합한지 검사할 유효성검사식
   let dispatch = useDispatch()
   // const mydata = useSelector((state) => state);
-  let AccessToken = useSelector((state) => state.AccessToken)
+  let AccessToken = useSelector((state) => state.authReducer.AccessToken)
   let [id,setId] = useState('')
   let [pw,setPw] = useState('')
   let [email, setEmailValid] = useState('')
@@ -35,7 +35,7 @@ const Login = () => {
   }
   
   const loginSubmit = async () => {
-    await axios.post('http://localhost:4000/auth/login',{account:id,pw:pw},{withcredential:true},).then((data)=>{
+    await axios.post('https://server.bootview.info/auth/login',{account:id,pw:pw},{ withCredentials : true }).then((data)=>{
       console.log(data)
       dispatch(getAccessToken(data.headers.authorization))
       dispatch(loginState(true))
@@ -71,13 +71,13 @@ const Login = () => {
     <div className="LoginWrapper">
       <div></div>
       <div className='Login-Box'>
-        <div class="mb-3">
-          <label for="exampleFormControlInput1" class="form-label">Email address</label>
-          <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="email" onChange={idSave}></input>
+        <div className="mb-3">
+          <label for="exampleFormControlInput1" className="form-label">Email address</label>
+          <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="email" onChange={idSave}></input>
         </div>
-        <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Password</label>
-          <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="password" onChange={pwSave}></input>
+        <div className="mb-3">
+        <label for="exampleFormControlInput1" className="form-label">Password</label>
+          <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="password" onChange={pwSave}></input>
         </div>
         <div className='LoginSubmitBtn'>
           <div className='LoginSubmitBtn-left'></div>

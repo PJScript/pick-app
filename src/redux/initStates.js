@@ -1,7 +1,13 @@
 export let initState = {
   AccessToken:'',
-  Target:'',
   LoginState:false,
   Number:1,
-  Name:''
+  Email:'',
+  MyReviews:[]
 }
+
+export let reviewState = {
+  Target:'',
+  Reviews:[]
+}
+
