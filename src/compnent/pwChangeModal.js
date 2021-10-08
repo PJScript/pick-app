@@ -7,15 +7,12 @@ const PwChageModal = () => {
   let [newPwCheck, setNewPwCheck] = useState('')
 
 const previousPwInput = (e) => {
-  console.log(e.target.value)
   setPreviousPw(e.target.value)
 }
 const newPwInput = (e) => {
-  console.log(e)
   setNewPw(e.target.value)
 }
 const newPwInputCheck = (e) => {
-  console.log(e)
   setNewPwCheck(e.target.value)
 }
 return (

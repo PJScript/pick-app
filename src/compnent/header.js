@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch} from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { getAccessToken, getMypageReview, loginState } from '../redux/actions'
+import { getAccessToken, getMypageReview, loginState, setPageCount } from '../redux/actions'
 
 import { Link } from 'react-router-dom'
 import axios from 'axios'
@@ -12,11 +12,11 @@ const Header = () => {
   let MyReviews = useSelector((state) => state.authReducer.MyReviews)
   let dispatch = useDispatch()
   let history = useHistory()
-  console.log(LoginState,"첫 랜더링 후 상태")
+
   
 
   const logoutBtn = async () => {
-    console.log(LoginState,"로그인상태")
+
     if(LoginState === false){
       history.push('/login')
     }else{
@@ -25,7 +25,6 @@ const Header = () => {
 
       await axios.get('https://server.bootview.info/auth/logout',{withCredentials:true})
       .then((data)=>{
-        console.log(data)
         alert('로그아웃 되었습니다')
       })
       history.push('/')
@@ -33,26 +32,28 @@ const Header = () => {
   }
 
   const getFirstReviews = async () => {
-    await axios.get('https://server.bootview.info/auth/profile?p=1', {
+    await axios.get(`https://server.bootview.info/auth/profile?p=1`, {
       headers:{
         "Authorization": AccessToken
       },withCredentials:true
     })
     .then((data) => {
-      console.log("여기 데이터",data.data)
-      dispatch(getMypageReview(data.data))
-      console.log("상태변경")
+      console.log(data,"데이터")
+      dispatch(setPageCount(parseInt(data.data.Count.cnt)))
+      dispatch(getMypageReview(data.data.Reviews))
     }).catch( async (err)=>{
+      console.log(err)
       if(err.response.status === 401){
         await axios.get('https://server.bootview.info/auth/token',{withCredentials:true})
         .then( async (data)=>{
           dispatch(getAccessToken(data.headers.authorization))
-          await axios.get('https://server.bootview.info/auth/profile?p=1',{
+          await axios.get(`https://server.bootview.info/auth/profile?p=1`,{
             headers:{
               "Authorization": data.headers.authorization
             },withCredentials:true
           }).then((data)=>{
-            dispatch(getMypageReview(data.data))
+            dispatch(setPageCount(parseInt(data.data.Count.cnt)))
+            dispatch(getMypageReview(data.data.Reviews))
           })
         })
       }

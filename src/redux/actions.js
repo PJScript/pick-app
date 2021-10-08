@@ -9,6 +9,7 @@ export const GET_TARGET = 'GET_TARGET'
 export const IS_LOADING = 'IS_LOADING'
 export const GET_NAME = 'GET_NAME'
 export const GET_MYPAGE_REVIEW = 'GET_MYPAGE_REVIEW'
+export const SET_PAGE_COUNT = 'SET_PAGE_COUNT'
 
 export const getAccessToken = (AccessToken) => {
   return {
@@ -71,6 +72,12 @@ export const getMypageReview = (MyReviews) => {
   }
 }
 
+export const setPageCount = (pageCnt) => {
+  return {
+    type:SET_PAGE_COUNT,
+    payload:pageCnt
+  }
+}
 export const addNumber = () => {
   return {
     type:ADD_NUMBER

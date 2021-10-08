@@ -6,6 +6,7 @@ import { useHistory } from 'react-router'
 import Swal from 'sweetalert2'
 import { useDispatch } from 'react-redux'
 import { getAccessToken, getFirstReview, resetReview } from '../redux/actions'
+
 const InputModal = (e) => {
   let dispatch = useDispatch()
   let history = useHistory()
@@ -20,56 +21,49 @@ const InputModal = (e) => {
   const inputTitle = async (e) => {
     localStorage.inputTitle = e.target.value
     setTitle(e.target.value)
-    console.log(e.target.value)
+
   }
   const inputReview = async (e) => {
     localStorage.inputReview = e.target.value
     setContent(e.target.value)
-    console.log(e.target.value)
+
   }
   const submit = async () => {
     let code = window.location.pathname
     code = code.split('/')[2]
     if(robotCheck){
 
-    console.log(code)
     await axios.post(`https://server.bootview.info/review/platform?code=${code}`, { title: title, content: content }, {
       headers: {
         "Authorization": AccessToken
       }, withCredentials: true
     }).then(async (data) => {
-      console.log(data)
       await axios.get(`https://server.bootview.info/review/platform?code=${code}&page=1`, { withCredentials: true })
         .then((res) => {
-          console.log(res.data, "데이터가져옴 다시")
           dispatch(resetReview())
           dispatch(getFirstReview(res.data))
           history.go(`/board/${code}`)
         }).catch((err) => {
-          console.log(err, "데이터 리 랜더링 오류")
           history.go('/')
         })
     }).catch(async (err) => {
-      console.log(err)
+
       await axios.get('https://server.bootview.info/auth/token', { withCredentials: true })
         .then((data) => {
-          console.log(data.headers.authorization)
           dispatch(getAccessToken(data.headers.authorization))
-          
           axios.post(`https://server.bootview.info/review/platform?code=${code}`, { title: title, content: content }, {
             headers: {
               "Authorization": data.headers.authorization
             }, withCredentials: true
           }).then((data) => {
-            console.log(data)
             axios.get(`https://server.bootview.info/review/platform?code=${code}&page=1`, { withCredentials: true })
               .then((res) => {
-                console.log(res.data, "데이터가져옴 다시")
+
                 dispatch(resetReview())
                 dispatch(getFirstReview(res.data))
                 history.go(`/board/${code}`)
               }).catch((err) => {
-                console.log(err, "데이터 리 랜더링 오류")
+
                 history.go('/')
               })
           })
@@ -82,7 +76,6 @@ const InputModal = (e) => {
   }
 
   const robotChecktBtn = (e) => {
-    console.log(e.target.checked)
     setrobotCheck(e.target.checked)
     if (e.target.checked) {
       setrobotCheckColor("rgb(0,128,0,0.6")
@@ -100,7 +93,6 @@ const InputModal = (e) => {
     }
   }
   const numberBtn = (e) =>{
-    console.log(e.target.value)
     setNumber(e.target.value)
 }
 return (

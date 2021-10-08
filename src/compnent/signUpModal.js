@@ -51,12 +51,10 @@ const SignUpModal = () => {
 
   useEffect(()=>{      
     if(test2.test(fullEmail)){
-      console.log('완료')
       setEmailColor('rgb(174, 255, 174)')
       setEmailFeedBack('완료')
       setEmailIconColor('green')
     }else{
-      console.log(fullEmail)
       setEmailColor('rgb(255, 152, 152)')
       setEmailFeedBack('이메일 형식이 올바르지 않습니다')
       setEmailIconColor('red')
@@ -64,9 +62,7 @@ const SignUpModal = () => {
   },[fullEmail])    // 이메일 형태로 만든 최종 이메일 값
 
   const nameCheck = (e) => {
-    console.log(e.target.value)
     if(nameExp.test(e.target.value)){
-      console.log('완료')
       setNameColor('rgb(174, 255, 174)')
       setNameFeedBack('완료')
       setNameIconColor('green')
@@ -79,14 +75,12 @@ const SignUpModal = () => {
     }
   }
   const radioCheck = (e) => {
-    console.log(e.target.value)
     setRadioValue(e.target.value)
   }
   const emailInput = (e) => {
       setEmail(e.target.value)
   }
   const emailAdressInput = (e) => {
-    console.log(e.target.value)
       setEmailList(e.target.value)
   }
   const pwCheck = (e) => {
@@ -95,7 +89,6 @@ const SignUpModal = () => {
     setPwCheckIconColor('rgb(255, 152, 152)')
     setPwCheckFeedBack('비밀번호가 같지 않습니다')
     if(pwtest.test(e.target.value)){
-      console.log('완료')
       setPwColor('rgb(174, 255, 174)')
       setPwFeedBack('완료')
       setPwIconColor('green')
@@ -110,7 +103,6 @@ const SignUpModal = () => {
   const pwValid = (e) => {
     setPwC(e.target.value)
     if(pw === e.target.value){
-      console.log('완료')
       setPwCheckColor('rgb(174, 255, 174)')
       setPwCheckFeedBack('완료')
       setPwCheckIconColor('green')
@@ -134,8 +126,6 @@ const SignUpModal = () => {
 
 
   const submitBtn = async (e) => {
-    console.log(e)
-    console.log(fullEmail)
     if(name.length <= 0 || email.length <= 0 || pw.length <= 0 || pwC.length <= 0 || radioValue.length <= 0){
       alert('항목을 모두 채워주세요')
     }else if(nameFeedBack != '완료' || emailFeedBack != '완료' || pwFeedBack  != '완료' || pwCheckFeedBack != '완료'){
@@ -149,12 +139,10 @@ const SignUpModal = () => {
         gender:radioValue,
         sns:'none'
       },{withCredentials:true}).then((data) => {
-        console.log(data)
         history.go('/login')
         alert('회원 가입이 완료되었습니다. 로그인 해주세요')
       }).catch((err)=>{
         if(err){
-          console.log(err)
         }else if(err.response.status === 409){
           Swal.fire({
             icon: 'error',
@@ -168,18 +156,16 @@ const SignUpModal = () => {
   }
 
   const cancelBtn = (e) => {
-    console.log(e)
+
   }
 
   const selectInput = (e) => {
-    console.log(e.target.innerText)
     setEmailList(e.target.innerText)
     setEmailAbleInput('none')
     setEmailDisAbleInput('grid')
   }
 
   const userInput = (e) => {
-    console.log(e.target.innerText)
     setEmailAbleInput('grid')
     setEmailDisAbleInput('none')
   }

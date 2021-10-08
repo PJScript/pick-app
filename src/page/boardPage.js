@@ -46,7 +46,12 @@ const TargetPage = ({match}) => {
   return (
     <>
     {isLoading? 
-    <Loading />:
+    <div className='loadingBox'>
+      <div></div>
+      <Loading />
+      <div></div>
+    </div>
+    :
     <div className='boardPage container-xxl'>
       <div className='boardItem'>
         <div className='boardTop'>
@@ -63,7 +68,7 @@ const TargetPage = ({match}) => {
           <InputModal />
           <ul className='boardList'>
             {
-            reviewArr.length <= 0? 
+            reviewArr.Reviews.length <= 0? 
               <div className='empty-reviewBox'>
                 <div></div>
                 <div></div>
@@ -74,7 +79,7 @@ const TargetPage = ({match}) => {
                 <div></div>
                 <div></div>
               </div>:
-            reviewArr.map((item) => {
+            reviewArr.Reviews.map((item) => {
               return <>
                 <li>
                   <div>

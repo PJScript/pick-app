@@ -1,4 +1,4 @@
-import { GET_ACCESSTOKEN, CHECK_LOGIN,MINER_NUMBER,ADD_NUMBER, GET_NAME, GET_EMAIL, GET_REVIEW, RESET_REVIEW, GET_TARGET, IS_LOADING, GET_MYPAGE_REVIEW } from "./actions";
+import { GET_ACCESSTOKEN, CHECK_LOGIN,MINER_NUMBER,ADD_NUMBER, GET_NAME, GET_EMAIL, GET_REVIEW, RESET_REVIEW, GET_TARGET, IS_LOADING, GET_MYPAGE_REVIEW, SET_PAGE_COUNT } from "./actions";
 import { initState, reviewState } from "./initStates";
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
@@ -47,15 +47,28 @@ const authReducer = (state = initState, action) => {
 const reviewReducer = (state = [], action) => {
   switch(action.type){
     case GET_REVIEW:
-      return [...state, ...action.payload]
+      return {
+        ...state,
+        Reviews:action.payload
+      } 
+
 
     case RESET_REVIEW:
-      return []
+      return {
+        ...state,
+        Reviews: []
+      }
     
     case GET_TARGET:
       return {
         ...state,
         Target:action.payload
+      }
+
+    case SET_PAGE_COUNT:
+      return{
+        ...state,
+        PageCnt:action.payload
       }
     
     default:

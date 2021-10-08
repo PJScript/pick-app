@@ -17,6 +17,13 @@ body,html{
   cursor:pointer;
 }
 /* All page */
+.loadingBox{
+  display: flex;
+  height: 79vh;
+  justify-content: center;
+  align-items: center;
+}
+
 .pagenation-navBox{
   display: flex;
   justify-content: center;
@@ -26,7 +33,7 @@ body,html{
   justify-content:space-between
 }
 .welcomeMsg{
-  font-size:20%;
+  font-size:0.8rem;
   margin-top:2%;
   margin-right:10px;
 }
@@ -339,7 +346,16 @@ footer{
 }
 
 /* mypage */
-
+.myPageTable{
+  height: 61.5vh;
+  display: flex;
+  flex-direction: column;
+  justify-content:space-between;
+}
+.blankReviewBox{
+  display: flex;
+  justify-content: center;
+}
 .mypage-nickNameBox{
   margin-bottom: 20px;
 }
