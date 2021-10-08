@@ -4,11 +4,11 @@ import { useHistory } from 'react-router'
 const BoardLink = () => {
   let history = useHistory()
   const targetPf = (e) => {
-    console.log(e.target.innerText)
+    (e.target.innerText)
     localStorage.platformname = e.target.innerText
 
     if(e.target.innerText === '준비중..'){
-      console.log(e.target.innerText)
+      (e.target.innerText)
       history.push('/')
     }
   }

@@ -36,7 +36,6 @@ const Login = () => {
   
   const loginSubmit = async () => {
     await axios.post('https://server.bootview.info/auth/login',{account:id,pw:pw},{ withCredentials : true }).then((data)=>{
-      console.log(data)
       dispatch(getAccessToken(data.headers.authorization))
       dispatch(loginState(true))
       dispatch(getName(id))
@@ -47,7 +46,6 @@ const Login = () => {
         history.goBack()
       }
     }).catch(async (err)=>{
-      console.log(err)
       await Swal.fire({
         icon: 'warning',
         title: '아이디 혹은 비밀번호 오류',
@@ -59,7 +57,6 @@ const Login = () => {
   const emailValidate = (e) => {
     setEmailValid(e.target.value)
     if(test2.test(e.target.value)){
-      console.log('good')
     }
   }
   const warning = () => {

@@ -12,25 +12,20 @@ const NavMenu = () => {
 
 
   const targetPlatform = async (e) => {
-    console.log(e,"이벤트")
     let code = codeParser(e.target.innerText)
     
 
     // dispatch(getTarget(target))
 
     localStorage.target = e.target.innerText
-    console.log(reviewArr, "클릭 후 리뷰")
-    
       await axios.get(`https://server.bootview.info/review/platform?code=${code}&page=1`,{withCredentials:true})
         .then((res) => {
-          console.log(res.data)
+          console.log(res,"받아온 데이터")
           dispatch(resetReview())
           dispatch(getFirstReview(res.data))
           dispatch(isLoading(false))
   })
 }
-
-  console.log(reviewArr,"다른 게시판 이동 후 상태 초기화")
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
@@ -70,7 +65,7 @@ const NavMenu = () => {
                 <Link to="/board/pt10"><li><div className="dropdown-item"  onClick={targetPlatform}>패스트캠퍼스</div></li></Link>
                 <Link to="/board/pt11"><li><div className="dropdown-item"  onClick={targetPlatform}>서울42</div></li></Link>
                 <Link to="/board/pt12"><li><div className="dropdown-item"  onClick={targetPlatform}>멋쟁이사자처럼</div></li></Link>
-                <Link to="/board/pt13"><li><div className="dropdown-item"  onClick={targetPlatform}>삼성ssafy</div></li></Link>   
+                <Link to="/board/pt13"><li><div className="dropdown-item"  onClick={targetPlatform}>삼성ssafy</div></li></Link>  
               </ul>
             </li>
             <li className="nav-item dropdown">

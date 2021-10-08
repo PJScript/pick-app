@@ -8,6 +8,7 @@ export let initState = {
 
 export let reviewState = {
   Target:'',
-  Reviews:[]
+  Reviews:[],
+  PageCnt:''
 }
 
