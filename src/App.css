@@ -346,6 +346,10 @@ footer{
 }
 
 /* mypage */
+.patchAndDelete {
+  display: flex;
+  margin-bottom:-1px;
+}
 .myPageTable{
   height: 61.5vh;
   display: flex;

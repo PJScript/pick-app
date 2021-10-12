@@ -3,17 +3,27 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import PwChageModal from '../compnent/pwChangeModal'
 import { useDispatch } from 'react-redux'
-import { getAccessToken, getMypageReview } from '../redux/actions'
-
+import { getAccessToken, getMypageReview, loginState, setPageCount } from '../redux/actions'
+import { useHistory } from 'react-router-dom'
+import ReviewPatchModal from '../compnent/reviewPatchModal'
 const MyPage = () => {
   let dispatch = useDispatch()
+  let history = useHistory()
+  let nickNameRegExp = /[0-9]|[a-z]|[A-Z]|[가-힣]|[ㄱ-ㅎ]/;
+  let specialSymbolsCheck = /[`~!@#$%^&+=*|\\\'\";:\/?]/gi;
+
   let [nickName, setNickName] = useState('')
   let [validMsg, setValidMsg] = useState('닉네임 변경 후 닉네임 중복확인을 해주세요')
   let [validColor, setValidColor] = useState('black')
+
+  let [id, setId] = useState()
+  let [title, setTitle] = useState('')
+  let [content, setContent] = useState('')
+
   let AccessToken = useSelector((state) => state.authReducer.AccessToken)
   let Name = useSelector((state) => state.authReducer.Email)
   let MyReviews = useSelector((state) => state.authReducer.MyReviews)
-  let pageCnt  = useSelector((state) => state.reviewReducer.PageCnt)
+  let pageCnt = useSelector((state) => state.reviewReducer.PageCnt)
 
   const pwIcon = () => {
     let result = []
@@ -34,31 +44,39 @@ const MyPage = () => {
     setNickName(e.target.value)
   }
   const nickNameCheck = async () => {
-    await axios.post('https://server.bootview.info/auth/valid', { "name": nickName }, {
-      headers: {
-        "Authorization": AccessToken
-      }, withCredentials: true
-    }).then((data) => {
-      if (data.status === 200) {
-        setValidColor('green')
-        setValidMsg('사용할 수 있는 닉네임 입니다.')
-      }
-    }).catch(async (err) => {
-      if (err.response.status === 409) {
-        setValidColor('red')
-        setValidMsg('이미 존재하는 닉네임 입니다')
-      } else if (err.response.status === 401) {
-        await axios.get('https://server.bootview.info/auth/token', { withCredentials: true })
-          .then(async (data) => {
-            dispatch(getAccessToken(data.headers.authorization))
-            await axios.post('https://server.bootview.info/auth/valid', { "name": nickName }, {
-              headers: {
-                "Authorization": data.headers.authorization
-              }, withCredentials: true
-            }).then((data) => console.log(data))
-          })
-      }
-    })
+    console.log(nickNameRegExp.test(nickName),"한글 영어 테스트")
+    console.log(specialSymbolsCheck.test(nickName),"특수문자 테스트")
+    if (nickNameRegExp.test(nickName) && !specialSymbolsCheck.test(nickName)) {
+      await axios.post('https://server.bootview.info/auth/valid', { "name": nickName }, {
+        headers: {
+          "Authorization": AccessToken
+        }, withCredentials: true
+      }).then((data) => {
+        if (data.status === 200) {
+          setValidColor('green')
+          setValidMsg('사용할 수 있는 닉네임 입니다.')
+        }
+      }).catch(async (err) => {
+        if (err.response.status === 409) {
+          setValidColor('red')
+          setValidMsg('이미 존재하는 닉네임 입니다')
+        } else if (err.response.status === 401) {
+          await axios.get('https://server.bootview.info/auth/token', { withCredentials: true })
+            .then(async (data) => {
+              dispatch(getAccessToken(data.headers.authorization))
+              await axios.post('https://server.bootview.info/auth/valid', { "name": nickName }, {
+                headers: {
+                  "Authorization": data.headers.authorization
+                }, withCredentials: true
+              }).then((data) => console.log(data))
+            })
+        }
+      })
+    } else {
+      setValidColor('orange')
+      setValidMsg('사용할 수 없는 닉네임 입니다')
+    }
+
   }
   const reviewDelete = async (e) => {
     let number = e.nativeEvent.path[2].cells[0].innerText
@@ -80,10 +98,13 @@ const MyPage = () => {
               "Authorization": AccessToken
             }, withCredentials: true
           }).then((data) => {
+            console.log(data,"다시 프로필 요청")
             dispatch(getMypageReview(''))
-            dispatch(getMypageReview(data.data))
+            dispatch(getMypageReview(data.data.Reviews))
+            dispatch(setPageCount(parseInt(data.data.Count.cnt)))
             alert('게시글이 삭제되었습니다.')
           }).catch((err) => {
+            console.log(err)
             console.log(err.response, "프로필 재요청 오류")
             
           })
@@ -162,7 +183,92 @@ const MyPage = () => {
     )
     return result
   }
-  console.log(pageCnt,"페이지넘버")
+
+  const changeNickName = async () => {
+    if (validColor !== 'green') {
+      alert('닉네임 중복체크를 해주세요')
+    } else {
+      await axios.post('https://server.bootview.info/auth/change/nickname', { "nickname": nickName }, {
+        headers: {
+          "Authorization": AccessToken
+        }
+      }).then( async () => {
+        await axios.get('https://server.bootview.info/auth/logout',{withCredentials:true})
+        .then( async ()=>{
+          dispatch(loginState(false))
+          dispatch(getAccessToken(''))
+          alert('변경되었습니다. 다시 로그인 해주세요')
+          history.push('/')
+        })
+      }).catch(async (err) => {
+        if (err.response.status === 401) {
+          await axios.get('https://server.bootview.info/auth/token', { withCredentials: true })
+            .then(async (data) => {
+              dispatch(getAccessToken(data.headers.authorization))
+              await axios.get(`https://server.bootview.info/auth/change/nickname`, { "nickname": nickName }, {
+                headers: {
+                  "Authorization": data.headers.authorization
+                }, withCredentials: true
+              }).then(async (data) => {
+                await axios.get('https://server.bootview.info/auth/logout', { withCredentials: true })
+                  .then(() => console.log('로그아웃 완료'))
+              })
+            })
+        } else {
+          console.log(err, "토큰 만료 후 재요청 오류")
+        }
+      })
+    }
+  }
+  console.log(pageCnt, "페이지넘버")
+
+  const reviewPatch = (e) => {
+    let parseNumber = parseInt(e.nativeEvent.path[3].cells[0].innerText)
+    console.log('클릭됨')
+    setId(MyReviews[parseNumber-1].id)
+    setTitle(MyReviews[parseNumber-1].title)
+    setContent(MyReviews[parseNumber-1].content)
+  }
+
+  const inputTitle = (e) => {
+    setTitle(e.target.value)
+  }
+  const inputContent = (e) => {
+    setContent(e.target.value)
+  }
+  const submitPatchReview = async () => {
+    await axios.post('https://server.bootview.info/review/patch',{"id":id,"title":title,"content":content},{
+      headers:{
+        "Authorization":AccessToken
+      },withCredentials:true
+    }).then( async (data)=>{
+      await axios.get(`https://server.bootview.info/auth/profile?p=1`,{
+        headers:{
+          "Authorization":AccessToken
+        },withCredentials:true
+      }).then((data)=>{
+        dispatch(getMypageReview(''))
+        dispatch(getMypageReview(data.data.Reviews))
+        history.go('/mypage')
+      }).catch((err)=>{
+        alert('알 수 없는 오류. 잠시 후 다시 시도해주세요')
+        history.go('/')
+      })
+    }).catch( async (err)=>{
+      if(err.response.status === 401){
+        await axios.post('https://server.bootview.info/auth/token')
+        .then( async (data)=>{
+          dispatch(getAccessToken(data.headers.authorization))
+          await axios.post('https://server.bootview.info/review/patch',{"id":id,"title":title,"content":content},{
+            headers:{
+              "Authorization":data.headers.authorization
+            },withCredentials:true
+          }).then((data)=>{console.log("성공")}).catch((err)=>{console.log(err.response,"토큰 가져오다 오고 재요청 오류")})
+        }).catch((err)=>{console.log(err.response,"토큰 가져오는 오류")})
+      }
+    })
+  }
+  console.log('마이페이지 렌더링 횟수')
   return (
     <>
       <div class="container-fluid" style={{ border: '1px solid red' }}>
@@ -177,6 +283,7 @@ const MyPage = () => {
         <div className="mypage-nickNameBox">
           <span>닉네임 : <input size="12" onChange={nickNameInput}></input></span>
           <button type="button" className="btn btn-primary btn-sm button" onClick={nickNameCheck}>중복체크</button>
+          <button type="button" className="btn btn-success btn-sm button" onClick={changeNickName}>변경하기</button>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16" style={{ color: validColor }}>
             <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
           </svg>
@@ -227,7 +334,32 @@ const MyPage = () => {
                     <td>{Name}</td>
                     <td>{item.title}</td>
                     <td>{item.createDate}</td>
-                    <td><span className="hover">수정</span> / <span className="hover" onClick={reviewDelete}>삭제</span></td>
+                    <td className="patchAndDelete">    
+                      <span>  {/* 게시글 수정 모달 */}
+                        <div className="hover" data-bs-toggle="modal" data-bs-target="#reviewPatchModal" onClick={reviewPatch}> 수정 </div>
+                        <div className="modal fade" id="reviewPatchModal" tabindex="-1" aria-labelledby="reviewPatchModalLabel" aria-hidden="false">
+                          <div className="modal-dialog">
+                            <div className="modal-content">
+                              <div className="modal-header">
+                                <h5 className="modal-title" id="reviewPatchModalLabel">게시물 수정</h5>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div className="modal-body">
+                                <h6>제목</h6>
+                                <input type="text" value={title} onChange={inputTitle}></input>
+                              </div>
+                              <div className="modal-body">
+                                <h6>내용</h6>
+                                <textarea type="text" value={content} onChange={inputContent}></textarea>
+                              </div>
+                              <div className="modal-footer">
+                                <button type="button" className="btn btn-primary" onClick={submitPatchReview}>완료</button>
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </span> / <span className="hover" onClick={reviewDelete}>삭제</span></td>
                     <td>{item.platformCode}</td>
                   </tr>
                 })}
