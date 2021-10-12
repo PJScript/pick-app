@@ -256,7 +256,7 @@ const MyPage = () => {
       })
     }).catch( async (err)=>{
       if(err.response.status === 401){
-        await axios.post('https://server.bootview.info/auth/token')
+        await axios.post('https://server.bootview.info/auth/token',{withCredentials:true})
         .then( async (data)=>{
           dispatch(getAccessToken(data.headers.authorization))
           await axios.post('https://server.bootview.info/review/patch',{"id":id,"title":title,"content":content},{
