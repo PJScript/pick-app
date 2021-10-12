@@ -256,15 +256,28 @@ const MyPage = () => {
       })
     }).catch( async (err)=>{
       if(err.response.status === 401){
-        await axios.post('https://server.bootview.info/auth/token',{withCredentials:true})
+        await axios.get('https://server.bootview.info/auth/token',{withCredentials:true})
         .then( async (data)=>{
           dispatch(getAccessToken(data.headers.authorization))
-          await axios.post('https://server.bootview.info/review/patch',{"id":id,"title":title,"content":content},{
-            headers:{
-              "Authorization":data.headers.authorization
-            },withCredentials:true
-          }).then((data)=>{console.log("성공")}).catch((err)=>{console.log(err.response,"토큰 가져오다 오고 재요청 오류")})
-        }).catch((err)=>{console.log(err.response,"토큰 가져오는 오류")})
+          await axios.post('https://server.bootview.info/review/patch', { "id": id, "title": title, "content": content }, {
+            headers: {
+              "Authorization": data.headers.authorization
+            }, withCredentials: true
+          }).then( async () => {
+            await axios.get(`https://server.bootview.info/auth/profile?p=1`, {
+              headers: {
+                "Authorization": data.headers.authorization
+              }, withCredentials: true
+            }).then((data) => {
+              dispatch(getMypageReview(''))
+              dispatch(getMypageReview(data.data.Reviews))
+              history.go('/mypage')
+            }).catch((err) => {
+              alert('알 수 없는 오류. 잠시 후 다시 시도해주세요')
+              history.go('/')
+            })
+          }).catch((err) => { console.log(err.response, "토큰 가져오다 오고 재요청 오류") })
+        }).catch((err) => { console.log(err.response, "토큰 가져오는 오류") })
       }
     })
   }
