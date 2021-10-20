@@ -5,7 +5,6 @@ import PwChageModal from '../compnent/pwChangeModal'
 import { useDispatch } from 'react-redux'
 import { getAccessToken, getMypageReview, loginState, setPageCount } from '../redux/actions'
 import { useHistory } from 'react-router-dom'
-import ReviewPatchModal from '../compnent/reviewPatchModal'
 const MyPage = () => {
   let dispatch = useDispatch()
   let history = useHistory()
