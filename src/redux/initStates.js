@@ -12,3 +12,7 @@ export let reviewState = {
   PageCnt:''
 }
 
+export let chatState = {
+  ChatQueue:[]
+}
+

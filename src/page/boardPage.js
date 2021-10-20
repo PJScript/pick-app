@@ -10,6 +10,7 @@ import { getFirstReview } from '../redux/actions'
 import { useEffect } from 'react'
 import Loading from '../compnent/loading'
 import { Route } from 'react-router-dom'
+import HelpDesk from '../compnent/helpDesk'
 import codeStates from '/home/js/Desktop/BootReviewClient/src/images/logo/codestates.8a6777aa.png'
 import vanillaCoding from '/home/js/Desktop/BootReviewClient/src/images/logo/vanilla.6fb47c65.png'
 import spartaCoding from '/home/js/Desktop/BootReviewClient/src/images/logo/sparta.674d2d5f.svg'
@@ -83,7 +84,7 @@ const TargetPage = ({match}) => {
           </div>
           <div className='boardTop-center' style={{backgroundImage:`url(${eval(localStorage.target)})`}}><h3>후기</h3></div>
           <div >
-            <a className='setting hover'><i className="bi bi-gear"></i> 설정 </a>
+            <a className='setting hover' onClick={()=>{alert('준비중인 기능입니다!')}}><i className="bi bi-gear"></i> 설정 </a>
           </div>
         </div>
         <h5 className='subtitle name'>{localStorage.target} </h5>

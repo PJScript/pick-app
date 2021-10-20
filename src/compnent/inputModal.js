@@ -5,7 +5,10 @@ import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import Swal from 'sweetalert2'
 import { useDispatch } from 'react-redux'
-import { getAccessToken, getFirstReview, resetReview } from '../redux/actions'
+import { getAccessToken, getFirstReview, resetReview, loginState, getName } from '../redux/actions'
+
+
+
 
 const InputModal = (e) => {
   let dispatch = useDispatch()
@@ -31,43 +34,40 @@ const InputModal = (e) => {
   const submit = async () => {
     let code = window.location.pathname
     code = code.split('/')[2]
-    if(robotCheck){
-
-    await axios.post(`https://server.bootview.info/review/platform?code=${code}`, { title: title, content: content }, {
-      headers: {
-        "Authorization": AccessToken
-      }, withCredentials: true
-    }).then(async (data) => {
-      await axios.get(`https://server.bootview.info/review/platform?code=${code}&page=1`, { withCredentials: true })
-        .then((res) => {
-          dispatch(resetReview())
-          dispatch(getFirstReview(res.data))
-          history.go(`/board/${code}`)
-        }).catch((err) => {
-          history.go('/')
-        })
-    }).catch(async (err) => {
-
-      await axios.get('https://server.bootview.info/auth/token', { withCredentials: true })
-        .then((data) => {
-          dispatch(getAccessToken(data.headers.authorization))
-          axios.post(`https://server.bootview.info/review/platform?code=${code}`, { title: title, content: content }, {
-            headers: {
-              "Authorization": data.headers.authorization
-            }, withCredentials: true
-          }).then((data) => {
-            axios.get(`https://server.bootview.info/review/platform?code=${code}&page=1`, { withCredentials: true })
-              .then((res) => {
-
-                dispatch(resetReview())
-                dispatch(getFirstReview(res.data))
-                history.go(`/board/${code}`)
-              }).catch((err) => {
-
-                history.go('/')
-              })
+    if (robotCheck) {
+      await axios.post(`https://server.bootview.info/review/platform?code=${code}`, { title: title, content: content }, {
+        headers: {
+          "Authorization": AccessToken
+        }, withCredentials: true
+      }).then(async (data) => {
+        await axios.get(`https://server.bootview.info/review/platform?code=${code}&page=1`, { withCredentials: true })
+          .then((res) => {
+            dispatch(resetReview())
+            dispatch(getFirstReview(res.data))
+            history.go(`/board/${code}`)
+          }).catch((err) => {
+            history.go('/')
           })
-        })
+      }).catch(async (err) => {
+
+        await axios.get('https://server.bootview.info/auth/token', { withCredentials: true })
+          .then((data) => {
+            dispatch(getAccessToken(data.headers.authorization))
+            axios.post(`https://server.bootview.info/review/platform?code=${code}`, { title: title, content: content }, {
+              headers: {
+                "Authorization": data.headers.authorization
+              }, withCredentials: true
+            }).then((data) => {
+              axios.get(`https://server.bootview.info/review/platform?code=${code}&page=1`, { withCredentials: true })
+                .then((res) => {
+                  dispatch(resetReview())
+                  dispatch(getFirstReview(res.data))
+                  history.go(`/board/${code}`)
+                }).catch((err) => {
+                  history.go('/')
+                })
+            })
+          })
     })
     } else {
       alert('상단 주의사항을 확인 하셨나요?')
@@ -84,10 +84,45 @@ const InputModal = (e) => {
     }
   }
   const writeBtn = async (e) => {
-    if(LoginState === false){
-      alert('로그인 후 이용 가능합니다 !')
-      history.push('/login')
-      history.go('/login')
+    if (LoginState === false) {
+      Swal.fire({
+        title: '로그인 후 이용 할 수 있습니다!',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: '로그인',
+        denyButtonText: `게스트 로그인`,
+      }).then( async (result) => {
+        console.log(result)
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          history.push('/login')
+          history.go('/login')
+        } else if (result.isDenied) {
+          await axios.post('https://server.bootview.info/auth/login', { account: 'guest@guest', pw: 'guest@123' }, { withCredentials: true })
+          .then((data) => {
+            dispatch(getAccessToken(data.headers.authorization))
+            dispatch(loginState(true))
+            dispatch(getName('guest@guest'))
+            // dispatch(getName(data))
+            if (history.location.pathname === '/login') {  // 로그인 페이지 연속으로 클릭시 이전 경로가 /login 으로나와서 로그인 페이지만 뜨는 오류 방지  
+              history.go('/')
+            } else {   // 이전페이지가 /login이 아니라면 이전페이지로 이동
+              alert('게스트로 로그인 되었습니다.')
+              history.go('/board')
+            }
+          }).catch(async (err) => {
+            await Swal.fire({
+              icon: 'warning',
+              title: '아이디 혹은 비밀번호 오류',
+              text: '아이디 혹은 비밀번호가 올바르지 않습니다. 다시한번 확인해주세요'
+            })
+          })
+        } else if (result.isDismissed) {
+          history.go('/board')
+        }
+      })
+      // history.push('/login')
+
     }else{
       return 1;
     }

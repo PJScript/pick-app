@@ -11,14 +11,14 @@ const MainPage = () => {
         <div className='Main mainfirst'>
           <div className='MainSubTitle_container'>
             <div className='MainSubTitle_title'>
-              <h4 style={{borderBottom:'2px solid skyblue'}}>All of coding infomation</h4>
-              <h5>코딩</h5><h3>부트캠프의</h3><h5>모든 것 </h5>
+              <h4 style={{borderBottom:'2px solid skyblue'}}>All of Review infomation</h4>
+              <h5>솔직한</h5><h3>익명후기</h3>
               <h1>BootView</h1>
             </div>
           </div>
         </div>
-        <div className='MainContent_container'>두번째 화면</div>
-        <div className='MainSecondContent_container'>세번째 화면</div>
+        <div className='MainContent_container'></div>
+        {/* <div className='MainSecondContent_container'>세번째 화면</div> */}
       </div>
       <div></div>
 

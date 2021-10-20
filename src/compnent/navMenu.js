@@ -41,16 +41,13 @@ const NavMenu = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/">
-                <div className="nav-link active">Why BootView</div>
+              <Link to="/info">
+                <div className="nav-link active">info</div>
               </Link>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link active" href="#">후기</a>
             </li>
             <li className="nav-item dropdown">
               <div className="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                부트캠프 목록
+                게시판
               </div>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <Link to="/board/pt1"><li><div className="dropdown-item"  onClick={targetPlatform}>코드스테이츠</div></li></Link>
@@ -68,19 +65,8 @@ const NavMenu = () => {
                 <Link to="/board/pt13"><li><div className="dropdown-item"  onClick={targetPlatform}>삼성ssafy</div></li></Link>  
               </ul>
             </li>
-            <li className="nav-item dropdown">
-              <div className="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                게시판
-              </div>
-              <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <li><a className="dropdown-item" href="/board" onClick={targetPlatform}>익명</a></li>
-                <li><a className="dropdown-item" href="/board" onClick={targetPlatform}>프론트 엔드</a></li>
-                <li><a className="dropdown-item" href="/board" onClick={targetPlatform}>백엔드</a></li>
-                <li><a className="dropdown-item" href="/board" onClick={targetPlatform}>자유 게시판</a></li>
-              </ul>
-            </li>
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="/">고객센터</a>
+              <a className="nav-link active" aria-current="page" href="/help">고객센터</a>
             </li>
           </ul>
           <form className="d-flex">
