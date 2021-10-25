@@ -4,7 +4,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { useDispatch, useSelector } from 'react-redux';
 import io from "socket.io-client";
-import { connectSocket, getAccessToken, getChatMessage } from '../redux/actions';
+import { connectSocket, getAccessToken, getChatMessage, resetChatMessage } from '../redux/actions';
 import Loading from "./loading"
 const HelpDesk = () => {
   let dispatch = useDispatch()
@@ -38,13 +38,15 @@ const HelpDesk = () => {
   }
 
   const clickHelpBtn = () => {
+    // alert('준비중인 기능입니다. !')
     setChatModal('flex')
-    setCurrentSocket(io('http://localhost:8888'))
+    setCurrentSocket(io('https://server.bootview.info'))
+    // dispatch(getChatMessage({'id':'system','inputText':'연결 되었습니다.'}))
   }
   const clickCancelBtn = () => {
     if (window.confirm('채팅을 종료 하시겠습니까?')) {
       currentSocket.disconnect()
-      dispatch(getChatMessage([]))
+      dispatch(resetChatMessage())
       setChatModal('none')
     } else {
       alert('채팅을 계속 유지합니다.')
@@ -141,7 +143,9 @@ const HelpDesk = () => {
                     </div>
                   </div>
               )
-            } else {
+            } else if(data.id === 'system'){
+              <div>채팅서버에 연결되었습니다</div>
+            }else {
               return(
                 <div className='chatItem'>
                 <div className='chatItem-left'>

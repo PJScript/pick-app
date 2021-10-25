@@ -1,20 +1,20 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
-import mainPage from '../src/page/mainPage'
-import myPage from '../src/page/myPage'
-import boardPage from './page/boardPage'
-import loginPage from './page/loginPage';
+import MainPage from '../src/page/mainPage'
+import MyPage from '../src/page/myPage'
+import BoardPage from './page/boardPage'
+import LoginPage from './page/loginPage';
 import NavMenu from './compnent/navMenu';
 import Header from './compnent/header'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
-import helpPage from './page/helpPage'
+import HelpPage from './page/helpPage'
 import targetPlatformPage from './page/targetPlatformPage';
 import { useSelector } from 'react-redux'
 import InfoPage from './page/infoPage';
-import adminPage from './page/adminPage';
+import AdminPage from './page/adminPage';
 import HelpDesk from './compnent/helpDesk';
-
+import ErrorPage from './page/errorPage';
 
 function App() {
 
@@ -25,13 +25,14 @@ function App() {
         <NavMenu />
         <div>
           <Switch>
-            <Route exact path='/' component={mainPage} />
-            <Route exact path='/mypage' component={myPage} />
-            <Route path='/board/:id' component={boardPage} />
-            <Route path='/login' component={loginPage} />
-            <Route path='/help' component={helpPage} />
+            <Route exact path='/' component={MainPage} />
+            <Route exact path='/mypage' component={MyPage} />
+            <Route path='/board/:id' component={BoardPage} />
+            <Route path='/login' component={LoginPage} />
+            <Route path='/help' component={HelpPage} />
             <Route path='/info' component={InfoPage} />
-            <Route path='/admin' component={adminPage} />
+            <Route path='/admin' component={AdminPage} />
+            <Route path='/error' component={ErrorPage} />
           </Switch>
         </div>
       </Router>
