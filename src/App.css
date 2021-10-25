@@ -551,3 +551,31 @@ footer{
   overflow: hidden;
   resize: none;
 }
+
+
+/* Error Page*/
+
+.errorPage-Wrapper{
+  display: flex;
+  height: 79vh;
+  align-items: center;
+  position: relative;
+}
+.errorPage-Wrapper::before{
+  background-image: url('/home/js/Desktop/BootReviewClient/src/images/oopsError.png');
+  content: "";
+  background-size: 300px;
+  background-repeat: no-repeat;
+  opacity: 0.2;
+  position: absolute;
+  top: 40%;
+  left:40%;
+  right: 0px;
+  bottom: 0px;
+}
+.errorPageMsg-item.top{
+  color:orange;
+}
+.errorPageMsg-item.bottom{
+  color:red;
+}

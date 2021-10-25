@@ -1,4 +1,4 @@
-import { GET_ACCESSTOKEN, CHECK_LOGIN,MINER_NUMBER,ADD_NUMBER, CONNECT_SOCKET, GET_EMAIL, GET_REVIEW, RESET_REVIEW, GET_TARGET, IS_LOADING, GET_MYPAGE_REVIEW, SET_PAGE_COUNT, GET_CHAT_MESSAGE } from "./actions";
+import { GET_ACCESSTOKEN, CHECK_LOGIN,MINER_NUMBER,ADD_NUMBER, CONNECT_SOCKET, GET_EMAIL, GET_REVIEW, RESET_REVIEW, GET_TARGET, IS_LOADING, GET_MYPAGE_REVIEW, SET_PAGE_COUNT, GET_CHAT_MESSAGE, RESET_CHAT_MESSAGE } from "./actions";
 import { initState, reviewState, chatState } from "./initStates";
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
@@ -83,7 +83,11 @@ const chatReducer = (state = chatState, action) => {
         ...state,
         ChatQueue:[...state.ChatQueue, action.payload]
       }
-
+    case RESET_CHAT_MESSAGE:
+      return {
+        ...state,
+        ChatQueue:[]
+      }
     case CONNECT_SOCKET:
       return {
         ...state,

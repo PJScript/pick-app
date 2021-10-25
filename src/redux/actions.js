@@ -12,6 +12,8 @@ export const GET_MYPAGE_REVIEW = 'GET_MYPAGE_REVIEW'
 export const SET_PAGE_COUNT = 'SET_PAGE_COUNT'
 export const GET_CHAT_MESSAGE = 'GET_CHAT_MESSAGE'
 export const CONNECT_SOCKET = 'CONNECT_SOCKET'
+export const RESET_CHAT_MESSAGE = 'RESET_CHAT_MESSAGE'
+
 export const getAccessToken = (AccessToken) => {
   return {
     type:GET_ACCESSTOKEN,
@@ -95,6 +97,12 @@ export const getChatMessage = (chats) => {
   return {
     type:GET_CHAT_MESSAGE,
     payload:chats
+  }
+}
+
+export const resetChatMessage = () => {
+  return {
+    type:RESET_CHAT_MESSAGE
   }
 }
 

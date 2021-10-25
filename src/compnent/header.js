@@ -39,8 +39,12 @@ const Header = () => {
     })
     .then((data) => {
       console.log(data,"데이터")
-      dispatch(setPageCount(parseInt(data.data.Count.cnt)))
-      dispatch(getMypageReview(data.data.Reviews))
+      if(data.data === 'welcome admin'){
+        history.push('/admin')
+      }else{
+        dispatch(setPageCount(parseInt(data.data.Count.cnt)))
+        dispatch(getMypageReview(data.data.Reviews))
+      }
     }).catch( async (err)=>{
       console.log(err)
       if(err.response.status === 401){
@@ -55,6 +59,8 @@ const Header = () => {
             dispatch(setPageCount(parseInt(data.data.Count.cnt)))
             dispatch(getMypageReview(data.data.Reviews))
           })
+        }).catch(()=>{
+          history.push('/error')
         })
       }
     })
