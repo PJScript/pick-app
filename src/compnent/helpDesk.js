@@ -40,11 +40,12 @@ const HelpDesk = () => {
   const clickHelpBtn = () => {
     // alert('준비중인 기능입니다. !')
     setChatModal('flex')
-    setCurrentSocket(io('https://server.bootview.info'))
+    setCurrentSocket(io('http://localhost:8888'))
     // dispatch(getChatMessage({'id':'system','inputText':'연결 되었습니다.'}))
   }
   const clickCancelBtn = () => {
     if (window.confirm('채팅을 종료 하시겠습니까?')) {
+      // currentSocket.emit('disconnectSocket')
       currentSocket.disconnect()
       dispatch(resetChatMessage())
       setChatModal('none')
@@ -56,20 +57,25 @@ const HelpDesk = () => {
   const clickSubmitBtn = () => {
     setInputText('')
     console.log('전송 버튼클릭됨')
-    currentSocket.emit("chat", { id: currentSocket.id, inputText })
+    currentSocket.emit("sendMsg", { room:currentSocket.id,id: currentSocket.id, inputText })
   }
-
   useEffect(()=>{
     if(currentSocket){
-      currentSocket.emit("connectChat", { id: currentSocket.id})
-      currentSocket.on("connectChat", (data) => {
+      currentSocket.emit("connection", { id: currentSocket.id})
+      currentSocket.on("connection",(data)=>{
         console.log(data)
-        setUserSocketId(currentSocket.id)
+        console.log(currentSocket,"현재 소켓 ")
+        currentSocket.emit("joinRoom",{id : currentSocket.id, room:currentSocket.id})
+        currentSocket.on("joinRoom",(data)=>{
+          console.log(data)
+        })
       })
-      currentSocket.on("chat", (data) => {
+
+
+      currentSocket.on("sendMsg", (data) => {
         console.log("채팅",data)
         console.log(chatQueue,"채팅 큐 내부")
-        dispatch(getChatMessage(data.data))
+        dispatch(getChatMessage(data))
       })
     }
   }, [currentSocket])
@@ -130,7 +136,7 @@ const HelpDesk = () => {
           </div> */}
           {/*오른쪽으로 보여줘야함*/}
           {ChatQueue.map((data) => {
-            if (data.id === userSocketId) {
+            if (data.id === currentSocket.id) {
               return (
                   <div className='MyChatItem'>
                     <div className='MyChatItem-left'></div>

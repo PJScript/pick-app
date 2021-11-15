@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Route, Link, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { getFirstReview, getTarget, isLoading, resetReview } from '../redux/actions';
+import { getFirstReview, getTarget, isLoading, resetReview, setPageCount } from '../redux/actions';
 import axios from 'axios';
 import { useHistory } from 'react-router';
 import codeParser from '../compnent/codeParser'
@@ -18,11 +18,16 @@ const NavMenu = () => {
     // dispatch(getTarget(target))
 
     localStorage.target = e.target.innerText
-      await axios.get(`https://server.bootview.info/review/platform?code=${code}&page=1`,{withCredentials:true})
+      await axios.get(`http://localhost:4000/review/platform?code=${code}&page=1`,{withCredentials:true})
         .then((res) => {
           console.log(res,"받아온 데이터")
           dispatch(resetReview())
-          dispatch(getFirstReview(res.data))
+          for(let i=9; i<=1; i--){
+            console.log('하이하이')
+            res.data.reviewList[i].no = i
+          }
+          dispatch(getFirstReview(res.data.reviewList))
+          dispatch(setPageCount(res.data.reviewPageCnt[0].cnt))
           dispatch(isLoading(false))
   })
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Swal from 'sweetalert2'
 import { useHistory } from 'react-router'
+import { Link } from 'react-router-dom'
 import InputModal from '../compnent/inputModal'
 import Header from '../compnent/header'
 import NavMenu from '../compnent/navMenu'
@@ -24,6 +25,9 @@ import fastCampus from '/home/js/Desktop/BootReviewClient/src/images/logo/pastCa
 import seoul42 from '/home/js/Desktop/BootReviewClient/src/images/logo/seoul42.af087112.png'
 import likeLion from '/home/js/Desktop/BootReviewClient/src/images/logo/likeLion.4f9e31ac.png'
 import ssafy from '/home/js/Desktop/BootReviewClient/src/images/logo/ssafy.b44a5b85.png'
+import BoardImageMaker from '../compnent/boardImageMaker'
+import { getAccessToken,resetReview, loginState, getName } from '../redux/actions'
+
 const TargetPage = ({match}) => {
   let 바닐라코딩 = vanillaCoding
   let 코드스테이츠 = codeStates
@@ -42,14 +46,18 @@ const TargetPage = ({match}) => {
   let dispatch = useDispatch()
   let reviewArr = useSelector((state) => state.reviewReducer)
   let isLoading = useSelector((state)=> state.loadingReducer)
+  // let pageCnt = useSelector((state)=>state.reviewReducer.PageCnt[0].cnt)
   let [test, setTest] = useState('')
-  const backPage = () => {
-    history.push('/')
-  }
+  let idx = 0
+
+  let LoginState = useSelector((state) => state.authReducer.LoginState)
+  let AccessToken = useSelector((state) => state.authReducer.AccessToken)
+  let ReviewPageCnt = useSelector((state) => state.reviewReducer.PageCnt)
+
 
   // useEffect(()=>{
   // if(reviewArr.length <= 0){
-  //   axios.get('https://server.bootview.info/comment/platform?code=pt1&page=1')
+  //   axios.get('http://localhost:4000/comment/platform?code=pt1&page=1')
   //   .then((res)=>{
   //     if(res.data.length <= 0){
   //       console.log('첫번째로 후기를 남겨주세요!')
@@ -65,8 +73,63 @@ const TargetPage = ({match}) => {
   const getReview = () => {
     
   }
+  const writeBtn = async (e) => {
+    if (LoginState === false) {
+      Swal.fire({
+        title: '로그인 후 이용 할 수 있습니다!',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: '로그인',
+        denyButtonText: `게스트 로그인`,
+      }).then( async (result) => {
+        console.log(result)
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          history.push('/login')
+          history.go('/login')
+        } else if (result.isDenied) {
+          await axios.post('http://localhost:4000/auth/login', { account: 'guest@guest', pw: 'guest@123' }, { withCredentials: true })
+          .then((data) => {
+            dispatch(getAccessToken(data.headers.authorization))
+            dispatch(loginState(true))
+            dispatch(getName('guest@guest'))
+            // dispatch(getName(data))
+            if (history.location.pathname === '/login') {  // 로그인 페이지 연속으로 클릭시 이전 경로가 /login 으로나와서 로그인 페이지만 뜨는 오류 방지  
+              history.go('/')
+            } else {   // 이전페이지가 /login이 아니라면 이전페이지로 이동
+              alert('게스트로 로그인 되었습니다.')
+              history.push(`/write/${window.location.pathname.split('/')[2]}`)
+            }
+          }).catch(async (err) => {
+            await Swal.fire({
+              icon: 'warning',
+              title: '아이디 혹은 비밀번호 오류',
+              text: '아이디 혹은 비밀번호가 올바르지 않습니다. 다시한번 확인해주세요'
+            })
+          })
+        } else if (result.isDismissed) {
+          history.go('/board')
+        }
+      })
+      // history.push('/login')
 
+    }else{
+      history.push(`/write/${window.location.pathname.split('/')[2]}`)
+    }
+  }
+
+  const clickReview = (e) => {
+    localStorage.no_ = Number(e.nativeEvent.path[2].childNodes[0].childNodes[0].innerText.split(':')[1])
+    console.log(e.nativeEvent.path[2].childNodes[0].childNodes[0].innerText.split(':')[1])
+    history.push(`/board/view/${window.location.pathname.split('/')[2]}`)
+    console.log(window.location.pathname,"위치 @")
+  }
+  
+  const reviewListMaker = () =>{
+    
+  }
   console.log(reviewArr,"현재 리뷰")
+  console.log(window.location.pathname.split('/')[2],"현재 위치")
   return (
     <>
     {isLoading? 
@@ -78,18 +141,13 @@ const TargetPage = ({match}) => {
     :
     <div className='boardPage container-xxl'>
       <div className='boardItem'>
-        <div className='boardTop'>
-          <div >
-            <a href='/' className='backPage hover' onClick={backPage}><i className="bi bi-arrow-left-circle"></i> 뒤로 </a>
-          </div>
-          <div className='boardTop-center' style={{backgroundImage:`url(${eval(localStorage.target)})`}}><h3>후기</h3></div>
-          <div >
-            <a className='setting hover' onClick={()=>{alert('준비중인 기능입니다!')}}><i className="bi bi-gear"></i> 설정 </a>
-          </div>
-        </div>
+        <BoardImageMaker />
         <h5 className='subtitle name'>{localStorage.target} </h5>
           <h4 className='subtitle'>후기를 남겨주세요!</h4>
-          <InputModal />
+          {/* <Link to={`/write/${window.location.pathname.split('/')[2]}`}>  * 이전 url 추출 후 매칭* */}
+          <h5 type="button" className="btn btn-primary" onClick={writeBtn}>작성하기</h5>
+          {/* </Link> */}
+
           <ul className='boardList'>
             {
             reviewArr.Reviews.length <= 0? 
@@ -100,22 +158,27 @@ const TargetPage = ({match}) => {
                 <h5 className='empty-reviewBox-Item-center'></h5>
                 <h2 className='emtpy-reviewBox-Item_center2'> 가장먼저 후기를 남겨주세요!</h2>
                 <h5 className='empty-reviewBox-Item-bottom'></h5>
-                <div></div>
-                <div></div>
-              </div>:
-            reviewArr.Reviews.map((item) => {
-              return <>
-                <li>
-                  <div>
-                    <h5 className='title'>{item.title}</h5>
-                    <h6 className='name'>{item.name}</h6>
-                    <div className='content'>{item.content}</div>
-                  </div>
-                  <a className='more hover'>더보기</a>
-                </li>
-              </>
-            })
-          } 
+                    <div></div>
+                    <div></div>
+                  </div> :
+                  reviewArr.Reviews.map((item) => {
+                    ReviewPageCnt = ReviewPageCnt - 1
+                    return <>
+                      <li className='reviewBox'>
+                        <div className='reviewBox-inner'>
+                          <div className='no'>no_ :<span>{ReviewPageCnt + 1}</span></div>
+                          <h5 className='title'>{item.title}</h5>
+                          <div className='name'>{item.name}</div>
+                          <div className='content' dangerouslySetInnerHTML={{ __html: item.content }}></div>
+                        </div>
+                        <div>
+                        <a className='more hover' onClick={clickReview}>댓글&더보기</a>
+                        </div>
+                      </li>
+
+                    </>
+                  })
+              }
           </ul>
           <a className='more hover'>더보기</a>
         </div>

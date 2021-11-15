@@ -46,7 +46,7 @@ const MyPage = () => {
     console.log(nickNameRegExp.test(nickName),"한글 영어 테스트")
     console.log(specialSymbolsCheck.test(nickName),"특수문자 테스트")
     if (nickNameRegExp.test(nickName) && !specialSymbolsCheck.test(nickName)) {
-      await axios.post('https://server.bootview.info/auth/valid', { "name": nickName }, {
+      await axios.post('http://localhost:4000/auth/valid', { "name": nickName }, {
         headers: {
           "Authorization": AccessToken
         }, withCredentials: true
@@ -60,10 +60,10 @@ const MyPage = () => {
           setValidColor('red')
           setValidMsg('이미 존재하는 닉네임 입니다')
         } else if (err.response.status === 401) {
-          await axios.get('https://server.bootview.info/auth/token', { withCredentials: true })
+          await axios.get('http://localhost:4000/auth/token', { withCredentials: true })
             .then(async (data) => {
               dispatch(getAccessToken(data.headers.authorization))
-              await axios.post('https://server.bootview.info/auth/valid', { "name": nickName }, {
+              await axios.post('http://localhost:4000/auth/valid', { "name": nickName }, {
                 headers: {
                   "Authorization": data.headers.authorization
                 }, withCredentials: true
@@ -85,14 +85,14 @@ const MyPage = () => {
     let platformCode = e.nativeEvent.path[2].cells[5].innerText
 
     if (window.confirm('정말 삭제하시겠습니까?')) {
-      await axios.post(`https://server.bootview.info/review/delete/platform?c=${platformCode}`, { "id": MyReviews[number - 1].id, "number": number, "account": account, "title": title, "createDate": createDate },
+      await axios.post(`http://localhost:4000/review/delete/platform?c=${platformCode}`, { "id": MyReviews[number - 1].id, "number": number, "account": account, "title": title, "createDate": createDate },
         {
           headers: {
             "Authorization": AccessToken
           }
         })
         .then(async (data) => {
-          await axios.get('https://server.bootview.info/auth/profile?p=1', {
+          await axios.get('http://localhost:4000/auth/profile?p=1', {
             headers: {
               "Authorization": AccessToken
             }, withCredentials: true
@@ -110,16 +110,16 @@ const MyPage = () => {
         })
         .catch(async (err) => {
           if (err.response.status === 401) {
-            await axios.get(`https://server.bootview.info/auth/token`, { withCredentials: true })
+            await axios.get(`http://localhost:4000/auth/token`, { withCredentials: true })
               .then(async (data) => {
                 dispatch(getAccessToken(data.headers.authorization))
-                await axios.post(`https://server.bootview.info/review/delete/platform?c=${platformCode}`, { "id": MyReviews[number - 1].id, "number": number, "account": account, "title": title, "createDate": createDate },
+                await axios.post(`http://localhost:4000/review/delete/platform?c=${platformCode}`, { "id": MyReviews[number - 1].id, "number": number, "account": account, "title": title, "createDate": createDate },
                   {
                     headers: {
                       "Authorization": data.headers.authorization
                     }
                   }).then(async () => {
-                    await axios.get(`https://server.bootview.info/auth/profile?p=1`, {
+                    await axios.get(`http://localhost:4000/auth/profile?p=1`, {
                       headers: {
                         "Authorization": data.headers.authorization
                       }, withCredentials: true
@@ -137,7 +137,7 @@ const MyPage = () => {
   }
   const pageNationBtn = async (e) => {
     let page = e.target.innerText
-    await axios.get(`https://server.bootview.info/auth/profile?p=${page}`, {
+    await axios.get(`http://localhost:4000/auth/profile?p=${page}`, {
       headers:{
         "Authorization": AccessToken
       },withCredentials:true
@@ -147,10 +147,10 @@ const MyPage = () => {
       dispatch(getMypageReview(data.data.Reviews))
     }).catch( async (err)=>{
       if(err.response.status === 401){
-        await axios.get('https://server.bootview.info/auth/token',{withCredentials:true})
+        await axios.get('http://localhost:4000/auth/token',{withCredentials:true})
         .then( async (data)=>{
           dispatch(getAccessToken(data.headers.authorization))
-          await axios.get(`https://server.bootview.info/auth/profile?p=${page}`,{
+          await axios.get(`http://localhost:4000/auth/profile?p=${page}`,{
             headers:{
               "Authorization": data.headers.authorization
             },withCredentials:true
@@ -187,12 +187,12 @@ const MyPage = () => {
     if (validColor !== 'green') {
       alert('닉네임 중복체크를 해주세요')
     } else {
-      await axios.post('https://server.bootview.info/auth/change/nickname', { "nickname": nickName }, {
+      await axios.post('http://localhost:4000/auth/change/nickname', { "nickname": nickName }, {
         headers: {
           "Authorization": AccessToken
         }
       }).then( async () => {
-        await axios.get('https://server.bootview.info/auth/logout',{withCredentials:true})
+        await axios.get('http://localhost:4000/auth/logout',{withCredentials:true})
         .then( async ()=>{
           dispatch(loginState(false))
           dispatch(getAccessToken(''))
@@ -201,15 +201,15 @@ const MyPage = () => {
         })
       }).catch(async (err) => {
         if (err.response.status === 401) {
-          await axios.get('https://server.bootview.info/auth/token', { withCredentials: true })
+          await axios.get('http://localhost:4000/auth/token', { withCredentials: true })
             .then(async (data) => {
               dispatch(getAccessToken(data.headers.authorization))
-              await axios.get(`https://server.bootview.info/auth/change/nickname`, { "nickname": nickName }, {
+              await axios.get(`http://localhost:4000/auth/change/nickname`, { "nickname": nickName }, {
                 headers: {
                   "Authorization": data.headers.authorization
                 }, withCredentials: true
               }).then(async (data) => {
-                await axios.get('https://server.bootview.info/auth/logout', { withCredentials: true })
+                await axios.get('http://localhost:4000/auth/logout', { withCredentials: true })
                   .then(() => console.log('로그아웃 완료'))
               })
             })
@@ -236,12 +236,12 @@ const MyPage = () => {
     setContent(e.target.value)
   }
   const submitPatchReview = async () => {
-    await axios.post('https://server.bootview.info/review/patch',{"id":id,"title":title,"content":content},{
+    await axios.post('http://localhost:4000/review/patch',{"id":id,"title":title,"content":content},{
       headers:{
         "Authorization":AccessToken
       },withCredentials:true
     }).then( async (data)=>{
-      await axios.get(`https://server.bootview.info/auth/profile?p=1`,{
+      await axios.get(`http://localhost:4000/auth/profile?p=1`,{
         headers:{
           "Authorization":AccessToken
         },withCredentials:true
@@ -255,15 +255,15 @@ const MyPage = () => {
       })
     }).catch( async (err)=>{
       if(err.response.status === 401){
-        await axios.get('https://server.bootview.info/auth/token',{withCredentials:true})
+        await axios.get('http://localhost:4000/auth/token',{withCredentials:true})
         .then( async (data)=>{
           dispatch(getAccessToken(data.headers.authorization))
-          await axios.post('https://server.bootview.info/review/patch', { "id": id, "title": title, "content": content }, {
+          await axios.post('http://localhost:4000/review/patch', { "id": id, "title": title, "content": content }, {
             headers: {
               "Authorization": data.headers.authorization
             }, withCredentials: true
           }).then( async () => {
-            await axios.get(`https://server.bootview.info/auth/profile?p=1`, {
+            await axios.get(`http://localhost:4000/auth/profile?p=1`, {
               headers: {
                 "Authorization": data.headers.authorization
               }, withCredentials: true

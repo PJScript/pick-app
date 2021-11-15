@@ -131,7 +131,7 @@ const SignUpModal = () => {
     }else if(nameFeedBack != '완료' || emailFeedBack != '완료' || pwFeedBack  != '완료' || pwCheckFeedBack != '완료'){
       alert('각 항목을 다시 확인해주세요')
     }else{
-      await axios.post('https://server.bootview.info/auth/signup',
+      await axios.post('http://localhost:4000/auth/signup',
       {
         account:fullEmail,
         pw:pw,

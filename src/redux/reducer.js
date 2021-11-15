@@ -86,7 +86,7 @@ const chatReducer = (state = chatState, action) => {
     case RESET_CHAT_MESSAGE:
       return {
         ...state,
-        ChatQueue:[]
+        ChatQueue:[{id:'system',innerText:'welcome !'}]
       }
     case CONNECT_SOCKET:
       return {
