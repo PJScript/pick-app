@@ -35,7 +35,7 @@ const Login = () => {
   }
   
   const loginSubmit = async () => {
-    await axios.post('https://server.bootview.info/auth/login',{account:id,pw:pw},{ withCredentials : true }).then((data)=>{
+    await axios.post('http://localhost:4000/auth/login',{account:id,pw:pw},{ withCredentials : true }).then((data)=>{
       dispatch(getAccessToken(data.headers.authorization))
       dispatch(loginState(true))
       dispatch(getName(id))

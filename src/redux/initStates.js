@@ -9,10 +9,10 @@ export let initState = {
 export let reviewState = {
   Target:'',
   Reviews:[],
-  PageCnt:''
+  ReviewPageCnt:''
 }
 
 export let chatState = {
-  ChatQueue:[]
+  ChatQueue:[{id:"system",inputText:"연결 되었습니다."}]
 }
 

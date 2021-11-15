@@ -15,6 +15,9 @@ import InfoPage from './page/infoPage';
 import AdminPage from './page/adminPage';
 import HelpDesk from './compnent/helpDesk';
 import ErrorPage from './page/errorPage';
+import InputForm from './compnent/inputForm';
+import DetailBoardPage from './page/detailBoard';
+
 
 function App() {
 
@@ -27,12 +30,14 @@ function App() {
           <Switch>
             <Route exact path='/' component={MainPage} />
             <Route exact path='/mypage' component={MyPage} />
-            <Route path='/board/:id' component={BoardPage} />
+            <Route exact path='/board/:id' component={BoardPage} />
             <Route path='/login' component={LoginPage} />
             <Route path='/help' component={HelpPage} />
             <Route path='/info' component={InfoPage} />
             <Route path='/admin' component={AdminPage} />
             <Route path='/error' component={ErrorPage} />
+            <Route path='/write/:id' component={InputForm} />
+            <Route path='/board/view/:id' component={DetailBoardPage} />
           </Switch>
         </div>
       </Router>

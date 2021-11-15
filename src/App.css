@@ -1,8 +1,15 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
-
+html{
+  font-family: 나눔고딕, NanumGothic, Malgun Gothic, sans-serif;
+}
 .hover:hover{
   color:orange;
   cursor: pointer;
+}
+.hoverBox:hover{
+  cursor: pointer;
+  box-shadow: 1px 1px 25px 1px rgba(255, 166, 0, 0.431);
+  /* color:orange; */
 }
 
 .hoverGreen:hover{
@@ -165,7 +172,10 @@ footer{
   
 }
 /* boardPage */
-
+.inputModal{
+  display: block;
+  width: 70vw;
+}
 .numberBox {
   margin-top:20px
 }
@@ -202,8 +212,7 @@ footer{
   background-position: bottom
 }
 .boardPage{
-  display: flex;
-  justify-content: space-evenly;
+
 }
 .boardItem{
   text-align: center;
@@ -219,6 +228,7 @@ footer{
   list-style-type:none;
   flex-wrap: wrap;
   text-align: left;
+  z-index: 1;
 }
 
 .boardList > li{
@@ -234,8 +244,21 @@ footer{
   border-radius: 24px;
   box-shadow: 1px 1px 25px 1px rgb(0 0 0/23%);
 }
+.no{
+  height: 4vh;
+}
 .boardList > li > div > .title{
+  height: 3vh;
+  /* width: 14vw; */
+  text-overflow:ellipsis;
+  overflow: hidden;
+  white-space:nowrap;
   text-align: center;
+  text-decoration: 1px solid grey;
+}
+.boardList > li > div > .name{
+  height: 4vh;
+  text-align: right;
 }
 .boardItem > .subtitle{
   text-align: left;
@@ -244,11 +267,24 @@ footer{
   background-color: rgb(128, 128, 128,0.1);
   border-radius: 10px;
 }
-
-.boardList > li > div > .content{
-  height: 200px;
+.reviewBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* overflow-y: hidden; */
+}
+.reviewBox-inner{
+  display: flex;
+  flex-direction: column;
   overflow-y: hidden;
 }
+.reviewBox-inner > .content{
+  text-overflow: ellipsis;
+  white-space: normal; 
+  line-height: 1.3; 
+  height: 12vh 
+}
+
 .confirmBtn{
   margin-top: 20px;
   margin-bottom: 20px;
@@ -552,6 +588,104 @@ footer{
   resize: none;
 }
 
+/*inputFormPage*/
+.inputFormPage{
+  display: flex;
+  justify-content: space-evenly;
+}
+.inputFormItem{
+  text-align: center;
+  width: 100%;
+  padding-right:20px;
+  padding-left:20px;
+  /* border: 1px solid red; */
+  overflow-x:hidden;
+  padding-bottom: 10vh;
+}
+.ck-editor__editable_inline {
+  min-height: 40vh;
+  max-height: 60vh;
+}
+/** detail Page **/
+.detailPage{
+  display: flex;
+  justify-content: space-evenly;
+}
+.detailPageItem{
+  text-align: center;
+  width: 100%;
+  padding-right:20px;
+  padding-left:20px;
+  /* border: 1px solid red; */
+  overflow-x:hidden;
+  padding-bottom: 10vh;
+}
+
+.detailPage_contentBox{
+  border:1px solid rgba(128, 128, 128, 0.575);
+  text-align: left; 
+}
+.detailPage_conetntBox_title{
+  border-bottom: 1px solid rgba(128, 128, 128, 0.575);
+  padding:10px;
+}
+.detailPage_conetntBox_content{
+  min-height: 100px;
+  max-height: none;
+  padding:10px;
+}
+.detailPage_contentBox_title_toolBox{
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid rgba(128, 128, 128, 0.575);
+}
+.detailPage_toolBox_item{
+  display: flex;
+}
+.item{
+  border-right: 1px solid rgba(128, 128, 128, 0.575);
+  padding-right: 5px;
+  padding-left:5px;
+}
+._3{
+  border-left: 1px solid rgba(128, 128, 128, 0.575);
+  padding-left: 5px;
+}
+._5{
+  border-left: 1px solid rgba(128, 128, 128, 0.575);
+  padding-left: 5px;
+}
+.detailPage_commentBox{
+  margin-top:10px;
+  border:1px solid rgba(128, 128, 128, 0.575)
+}
+.detailPage_commentList_Wrapper{
+  text-align: left;
+  margin-top:10px;
+  border-top:1px solid rgba(128, 128, 128, 0.575)
+}
+.detailPage_commentList_Inner{
+  padding-left:0px;
+  list-style:none;
+}
+.detailPage_profileBox{
+  display: flex;
+  flex-direction: column;
+}
+.detailPage_comment{
+  padding:15px;
+  display: flex;
+  padding-left:20px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.575);
+}
+.recomment{
+  text-align: right;
+}
+.comment{
+  margin-left:20px;
+  background-color: blanchedalmond;
+}
+
 
 /* Error Page*/
 
@@ -579,3 +713,4 @@ footer{
 .errorPageMsg-item.bottom{
   color:red;
 }
+

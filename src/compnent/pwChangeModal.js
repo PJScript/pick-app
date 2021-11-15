@@ -24,7 +24,7 @@ const pwchangeSubmitBtn = async () => {
   if(newPw !== newPwCheck){
     alert('새 비밀번호를 다시한번 확인해주세요')
   }else{
-    await axios.post('https://server.bootview.info/auth/change/password',{"prevPw":previousPw,"newPw":newPw},{
+    await axios.post('http://localhost:4000/auth/change/password',{"prevPw":previousPw,"newPw":newPw},{
       headers:{
         "Authorization":AccessToken
       },withCredentials:true

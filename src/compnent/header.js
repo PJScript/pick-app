@@ -23,16 +23,19 @@ const Header = () => {
       dispatch(loginState(false))
       dispatch(getAccessToken(''))
 
-      await axios.get('https://server.bootview.info/auth/logout',{withCredentials:true})
+      await axios.get('http://localhost:4000/auth/logout',{withCredentials:true})
       .then((data)=>{
         alert('로그아웃 되었습니다')
       })
-      history.push('/')
+      if(window.location.pathname === `/write/${window.location.pathname.split('/')[2]}`){
+        history.push(`/board/${window.location.pathname.split('/')[2]}`)
+      }
+      history.push(window.location.pathname)
     }
   }
 
   const getFirstReviews = async () => {
-    await axios.get(`https://server.bootview.info/auth/profile?p=1`, {
+    await axios.get(`http://localhost:4000/auth/profile?p=1`, {
       headers:{
         "Authorization": AccessToken
       },withCredentials:true
@@ -48,10 +51,10 @@ const Header = () => {
     }).catch( async (err)=>{
       console.log(err)
       if(err.response.status === 401){
-        await axios.get('https://server.bootview.info/auth/token',{withCredentials:true})
+        await axios.get('http://localhost:4000/auth/token',{withCredentials:true})
         .then( async (data)=>{
           dispatch(getAccessToken(data.headers.authorization))
-          await axios.get(`https://server.bootview.info/auth/profile?p=1`,{
+          await axios.get(`http://localhost:4000/auth/profile?p=1`,{
             headers:{
               "Authorization": data.headers.authorization
             },withCredentials:true
@@ -67,7 +70,7 @@ const Header = () => {
   }
   console.log(MyReviews)
   const guestLogin = async () =>{
-    await axios.post('https://server.bootview.info/auth/login',{account:'guest@guest',pw:'guest@123'},{ withCredentials : true }).then((data)=>{
+    await axios.post('http://localhost:4000/auth/login',{account:'guest@guest',pw:'guest@123'},{ withCredentials : true }).then((data)=>{
       dispatch(getAccessToken(data.headers.authorization))
       dispatch(loginState(true))
       dispatch(getName('guest@guest'))

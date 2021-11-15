@@ -6,6 +6,7 @@ import { useHistory } from 'react-router'
 import Swal from 'sweetalert2'
 import { useDispatch } from 'react-redux'
 import { getAccessToken, getFirstReview, resetReview, loginState, getName } from '../redux/actions'
+import InputForm from './inputForm'
 
 
 
@@ -35,12 +36,12 @@ const InputModal = (e) => {
     let code = window.location.pathname
     code = code.split('/')[2]
     if (robotCheck) {
-      await axios.post(`https://server.bootview.info/review/platform?code=${code}`, { title: title, content: content }, {
+      await axios.post(`http://localhost:4000/review/platform?code=${code}`, { title: title, content: content }, {
         headers: {
           "Authorization": AccessToken
         }, withCredentials: true
       }).then(async (data) => {
-        await axios.get(`https://server.bootview.info/review/platform?code=${code}&page=1`, { withCredentials: true })
+        await axios.get(`http://localhost:4000/review/platform?code=${code}&page=1`, { withCredentials: true })
           .then((res) => {
             dispatch(resetReview())
             dispatch(getFirstReview(res.data))
@@ -50,15 +51,15 @@ const InputModal = (e) => {
           })
       }).catch(async (err) => {
 
-        await axios.get('https://server.bootview.info/auth/token', { withCredentials: true })
+        await axios.get('http://localhost:4000/auth/token', { withCredentials: true })
           .then((data) => {
             dispatch(getAccessToken(data.headers.authorization))
-            axios.post(`https://server.bootview.info/review/platform?code=${code}`, { title: title, content: content }, {
+            axios.post(`http://localhost:4000/review/platform?code=${code}`, { title: title, content: content }, {
               headers: {
                 "Authorization": data.headers.authorization
               }, withCredentials: true
             }).then((data) => {
-              axios.get(`https://server.bootview.info/review/platform?code=${code}&page=1`, { withCredentials: true })
+              axios.get(`http://localhost:4000/review/platform?code=${code}&page=1`, { withCredentials: true })
                 .then((res) => {
                   dispatch(resetReview())
                   dispatch(getFirstReview(res.data))
@@ -98,7 +99,7 @@ const InputModal = (e) => {
           history.push('/login')
           history.go('/login')
         } else if (result.isDenied) {
-          await axios.post('https://server.bootview.info/auth/login', { account: 'guest@guest', pw: 'guest@123' }, { withCredentials: true })
+          await axios.post('http://localhost:4000/auth/login', { account: 'guest@guest', pw: 'guest@123' }, { withCredentials: true })
           .then((data) => {
             dispatch(getAccessToken(data.headers.authorization))
             dispatch(loginState(true))
@@ -133,7 +134,7 @@ const InputModal = (e) => {
 return (
   <div>
       <h5 type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="title" onClick={writeBtn}>작성하기</h5>
-      <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className="bd-example-modal-lg modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
@@ -164,11 +165,12 @@ return (
                   <label for="recipient-name" className="col-form-label" >제목</label>
                   <input type="text" className="form-control" id="recipient-name" placeholder='제목' onChange={inputTitle}></input>
                 </div>
-                <div className="mb-3">
+                {/* <div className="mb-3">
                   <label for="message-text" className="col-form-label" >후기</label>
                   <textarea className="form-control" id="message-text" placeholder='입력한 내용은 임시 저장 됩니다. * 새로고침 시 사라짐 *' onChange={inputReview}></textarea>
-                </div>
+                </div> */}
               </form>
+              <InputForm />
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
