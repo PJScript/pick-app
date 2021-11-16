@@ -1,6 +1,7 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
 html{
   font-family: 나눔고딕, NanumGothic, Malgun Gothic, sans-serif;
+  font-size: 1rem;
 }
 .hover:hover{
   color:orange;
@@ -118,6 +119,7 @@ footer{
   margin-top:20px;
 }
 .MainSubTitle_container{
+  opacity: 0.9;
   width: 100%;
   height: 0;
   position: relative;
@@ -126,7 +128,6 @@ footer{
   background-repeat: no-repeat;
   background-image:url('/home/js/Desktop/BootReviewClient/src/images/hands-2178566_1920.jpg');
   background-position: center;
-  
 }
 .MainSubTitle_title{
   width: 100%;
@@ -134,24 +135,94 @@ footer{
   font-size: 1vw;
   padding-left:20px;
   padding-top:20px;
+  text-align: center;
 }
 .MainContent_container{
   width: 100%;
-  height: 0;
+  height:0;
+  background-size: 80%;
   background-repeat: no-repeat;
-  padding-bottom : calc(700/1280 * 100%);
-  background-size: cover;
-  background-position: center;
-  background-image: url('/home/js/Desktop/BootReviewClient/src/images/MainSecondContent.png');
+  padding-bottom : calc(573/1800 * 100%);
+  background-position: right;
+  background-color: rgb(242, 242, 242);
+  background-image: url('/home/js/Desktop/BootReviewClient/src/images/MainSignUpContent.jpg');
+}
+.FirstText{
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  justify-content: space-around;
+  margin-left:5%;
+}
+.SecondText{
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  justify-content: space-around;
+  margin-left:70%;
+}
+.LastText{
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  justify-content: space-around;
+  margin-left:10%;
+}
+.LastViewTextBox{
+  font-size:1rem;
+  text-align:center;
+  padding-top:30px;
+}
+.Main_BlankContent_container_Style1{
+  font-size: 1vw;
+  width: 100%;
+  height:0;
+  background-size: 80%;
+  background-repeat: no-repeat;
+  padding-bottom : calc(100/1600 * 100%);
+  background-position: right;
+  background-color: rgb(242, 242, 242);
+}
+.Main_BlankContent_container_Style2{
+  width: 100%;
+  height:0;
+  background-size: 80%;
+  background-repeat: no-repeat;
+  padding-bottom : calc(100/1600 * 100%);
+  background-position: right;
+  background-color: rgb(255, 255, 255);
 }
 .MainSecondContent_container{
   width: 100%;
-  height: 0;
-  background-size: cover;
+  height:0;
+  background-size: 80%;
   background-repeat: no-repeat;
-  padding-bottom : calc(680/1080 * 100%);
+  padding-bottom : calc(573/1900 * 100%);
+  background-position: left;
+  background-image: url('/home/js/Desktop/BootReviewClient/src/images/MainReviews.jpg');
+}
+.MainThirdContent_container{
+  width: 100%;
+  height:0;
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-color: rgb(242, 242, 242);
+  padding-bottom : calc(573/1900 * 100%);
+  background-position: right;
+  background-image: url('/home/js/Desktop/BootReviewClient/src/images/MainWritePage.jpg');
+}
+.MainQuadContent_container{
+  width: 100%;
+  height:0;
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-color: rgb(255, 255, 255);
+  padding-bottom : calc(573/1900 * 100%);
   background-position: center;
-  /* background-image: url('/home/js/Desktop/BootReviewClient/src/images/second.png'); */
+  background-image: url('/home/js/Desktop/BootReviewClient/src/images/MainBlankReview.jpg');
 }
 
 
@@ -229,6 +300,7 @@ footer{
   flex-wrap: wrap;
   text-align: left;
   z-index: 1;
+  min-height: 37.5vh;
 }
 
 .boardList > li{

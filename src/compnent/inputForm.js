@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
 import { useDispatch } from 'react-redux'
-import { getAccessToken, getFirstReview, resetReview, loginState, getName } from '../redux/actions'
+import { getAccessToken, getFirstReview, resetReview, loginState, getName, setPageCount } from '../redux/actions'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useHistory } from 'react-router';
@@ -35,8 +35,9 @@ const InputForm = () => {
         await axios.get(`http://localhost:4000/review/platform?code=${code}&page=1`, { withCredentials: true })
           .then((res) => {
             dispatch(resetReview())
-            dispatch(getFirstReview(res.data))
-            history.go(`/board/${code}`)
+            dispatch(setPageCount(res.data.reviewPageCnt[0].cnt))
+            dispatch(getFirstReview(res.data.reviewList))
+            history.push(`/board/${code}`)
           }).catch((err) => {
             history.go('/')
           })
@@ -53,7 +54,8 @@ const InputForm = () => {
               axios.get(`http://localhost:4000/review/platform?code=${code}&page=1`, { withCredentials: true })
                 .then((res) => {
                   dispatch(resetReview())
-                  dispatch(getFirstReview(res.data))
+                  dispatch(setPageCount(res.data.reviewPageCnt[0].cnt))
+                  dispatch(getFirstReview(res.data.reviewList))
                   history.go(`/board/${code}`)
                 }).catch((err) => {
                   history.go('/')
